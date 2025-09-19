@@ -1,14 +1,9 @@
 # hxifish
 FFXI Tracker for fishing statistics.
 
-Window automatically opens when casting your line.
+Window automatically opens when casting your line.<br><br>
 
-
-
-/hxifish show
-
-/hxifish reset
-
-/hxifish reload
-
+/hxifish show <br>
+/hxifish reset <br>
+/hxifish reload <br>
 /hxifish unload
