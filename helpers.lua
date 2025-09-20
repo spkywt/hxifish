@@ -76,11 +76,11 @@ end
 ----------------------------------------------------------------------------------------------------
 function get_skill_level(sID)
 	if (sID == 48) then
-      if not (default_config[playerName][SkillTypes[sID]]) then
-         default_config[playerName][SkillTypes[sID]] = { skill = nil };
+      if not (config.settings[SkillTypes[sID]]) then
+         config.settings[SkillTypes[sID]] = { skill = nil };
       end
    
-      return default_config[playerName][SkillTypes[sID]].skill;
+      return config.settings[SkillTypes[sID]].skill;
    end
    
    return false;
@@ -93,15 +93,15 @@ function set_skill_level(sID, newVal)
       
 		newVal = newVal or jobskill;
       newVal = tonumber(string.format("%.1f", newVal));
-		default_config[playerName][SkillTypes[sID]].skill = newVal;
+		config.settings[SkillTypes[sID]].skill = newVal;
       
 		if (newVal < jobskill) then
-			default_config[playerName][SkillTypes[sID]].skill = jobskill;
+			config.settings[SkillTypes[sID]].skill = jobskill;
 		elseif ((newVal - 1.4) > jobskill) then
-			default_config[playerName][SkillTypes[sID]].skill = jobskill;
+			config.settings[SkillTypes[sID]].skill = jobskill;
 		end
       
-      echo(SkillTypes[sID] .. ' Skill', '' .. default_config[playerName][SkillTypes[sID]].skill);
+      echo(SkillTypes[sID] .. ' Skill', '' .. config.settings[SkillTypes[sID]].skill);
 	end
 end
 

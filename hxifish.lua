@@ -40,43 +40,27 @@ local config      = require('config');
 local moon        = require('.\\data\\moon');
 local items       = require('.\\data\\items');
 
-
 ----------------------------------------------------------------------------------------------------
--- Globals (required by other lua files)
+-- func: settings
+-- desc: Initialize settings
 ----------------------------------------------------------------------------------------------------
-Entity				   =	AshitaCore:GetMemoryManager():GetEntity();
-party				      =	AshitaCore:GetMemoryManager():GetParty();
---player				   =	AshitaCore:GetMemoryManager():GetPlayer();
-target				   =	AshitaCore:GetMemoryManager():GetTarget();
-inventory			   =	AshitaCore:GetMemoryManager():GetInventory();
-resource			      =	AshitaCore:GetResourceManager();
-playerName			   =	party:GetMemberName(0);
-
-
----------------------------------------------------------------------------------------------------
--- desc: Default configuration table for settings file.
----------------------------------------------------------------------------------------------------
-default_config =
+local default_settings =
 {
-	[playerName] 				=	{
-		Settings				   =	{};
-		Fishing					=	{
-			skill				   =	nil;
-			stats				   =	{
-				casts			   =	0;
-				fish			   =	0;
-				item			   =	0;
-				gil				=	0;
-				rodBreak		   =	0;
-				lineBreak		=	0;
-				canceled		   =	0;
-				noCatch			=	0;
-				monster			=	0;
-			};
-		};
-	};
+   Fishing					=	{
+      skill				   =	nil;
+      stats				   =	{
+         casts			   =	0;
+         fish			   =	0;
+         item			   =	0;
+         gil				=	0;
+         rodBreak		   =	0;
+         lineBreak		=	0;
+         canceled		   =	0;
+         noCatch			=	0;
+         monster			=	0;
+      };
+   };
 };
-
 
 ----------------------------------------------------------------------------------------------------
 -- func: ShowFishingTracker
@@ -99,7 +83,7 @@ local function ShowFishingTracker()
 		-- Current Fishing Skill
 		imgui.Text('Skill:');
 		imgui.SameLine();
-		local FishingSkill = default_config[playerName].Fishing.skill;
+		local FishingSkill = config.settings.Fishing.skill;
       local player = AshitaCore:GetMemoryManager():GetPlayer();
 		if (FishingSkill == nil) then FishingSkill = player:GetCraftSkill(0):GetSkill(); end
 		local FishingSkillMax = (player:GetCraftSkill(0):GetRank() + 1) * 10;
@@ -120,7 +104,7 @@ local function ShowFishingTracker()
 		imgui.TextColored({1.0, 1.0, 0.4, 1.0},'Category     Session  All-Time');
 		imgui.Separator();
 		local var_stats = config.fishTracker.stats;
-		local cfg_stats = default_config[playerName].Fishing.stats;
+		local cfg_stats = config.settings.Fishing.stats;
 		imgui.Text('Fish:        ' .. string.format("%-9s",var_stats.fish) .. cfg_stats.fish);
 		imgui.Text('Item:        ' .. string.format("%-9s",var_stats.item) .. cfg_stats.item);
 		imgui.Text('Monster:     ' .. string.format("%-9s",var_stats.monster) .. cfg_stats.monster);
@@ -172,7 +156,14 @@ end
 -- desc: Event called when the addon is being loaded.
 ----------------------------------------------------------------------------------------------------
 ashita.events.register('load', 'load_cb', function()
-	default_config = settings.load(default_config);
+   local ok, err = pcall(function()
+      config.settings = settings.load(default_settings);
+   end)
+   
+   if not ok then
+      settings.save();
+      config.settings = settings.load(default_settings);
+   end
 end);
 
 
@@ -217,8 +208,8 @@ ashita.events.register('command', 'command_cb', function(e)
             if (args[3]:any('confirm')) then
                config.fishHistory	= {};
                for k,v in pairs(config.fishTracker.stats) do config.fishTracker.stats[k] = 0; end
-               for k,v in pairs(default_config[playerName].Fishing.stats) do
-                  default_config[playerName].Fishing.stats[k] = 0; end
+               for k,v in pairs(config.settings.Fishing.stats) do
+                  config.settings.Fishing.stats[k] = 0; end
                settings.save();
                echo(addon.name, 'All-time data has been reset.');
             end
@@ -257,8 +248,11 @@ ashita.events.register('text_in', 'text_in_cb', function(e)
 	
 	--echo('debug', AshitaCore:GetResourceManager():GetString('areas', party:GetMemberZone(0)));
 
-    -- Start Fishing --
-	if (config.Status == 'FISHING') then
+   -- Start Fishing --
+	local party = AshitaCore:GetMemoryManager():GetParty();
+   local playerName = party:GetMemberName(0);
+   
+   if (config.Status == 'FISHING') then
 		local hookNothing = string.match(message, "You didn't catch anything.");
 		local fishSuccess = string.match(message, playerName .. " caught (.*)!");
 		local lineBreak   = string.match(message, "Your line breaks.");
@@ -276,23 +270,23 @@ ashita.events.register('text_in', 'text_in_cb', function(e)
 		if (hookNothing or lineBreak or rodBreak or stopFish or lostFish or monster or fishSuccess) then
 			if hookNothing then
 				config.fishTracker.stats.noCatch = config.fishTracker.stats.noCatch + 1;
-				default_config[playerName].Fishing.stats.noCatch = default_config[playerName].Fishing.stats.noCatch + 1;
+				config.settings.Fishing.stats.noCatch = config.settings.Fishing.stats.noCatch + 1;
 			elseif lineBreak then
 				config.fishTracker.stats.lineBreak = config.fishTracker.stats.lineBreak + 1;
-				default_config[playerName].Fishing.stats.lineBreak = default_config[playerName].Fishing.stats.lineBreak + 1;
+				config.settings.Fishing.stats.lineBreak = config.settings.Fishing.stats.lineBreak + 1;
 			elseif rodBreak then
 				config.fishTracker.stats.rodBreak = config.fishTracker.stats.rodBreak + 1;
-				default_config[playerName].Fishing.stats.rodBreak = default_config[playerName].Fishing.stats.rodBreak + 1;
+				config.settings.Fishing.stats.rodBreak = config.settings.Fishing.stats.rodBreak + 1;
 			elseif stopFish or lostFish then
 				config.fishTracker.stats.canceled = config.fishTracker.stats.canceled + 1;
-				default_config[playerName].Fishing.stats.canceled = default_config[playerName].Fishing.stats.canceled + 1;
+				config.settings.Fishing.stats.canceled = config.settings.Fishing.stats.canceled + 1;
 			elseif monster then
 				config.fishTracker.stats.monster = config.fishTracker.stats.monster + 1;
-				default_config[playerName].Fishing.stats.monster = default_config[playerName].Fishing.stats.monster + 1;
+				config.settings.Fishing.stats.monster = config.settings.Fishing.stats.monster + 1;
 			end
 			
 			config.fishTracker.stats.casts = config.fishTracker.stats.casts + 1;
-			default_config[playerName].Fishing.stats.casts = default_config[playerName].Fishing.stats.casts + 1;
+			config.settings.Fishing.stats.casts = config.settings.Fishing.stats.casts + 1;
 			config.Status = nil;
 		end
 		
@@ -367,7 +361,7 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
 						for _,v in pairs(ListFish) do
 						  if v == item_name then
 							config.fishTracker.stats.fish = config.fishTracker.stats.fish + item_quantity;
-							default_config[playerName].Fishing.stats.fish = default_config[playerName].Fishing.stats.fish + item_quantity;
+							config.settings.Fishing.stats.fish = config.settings.Fishing.stats.fish + item_quantity;
 							break
 						  end
 						end
@@ -376,10 +370,10 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
 						  if v == item_name then
 							if (item == 65535) then
 								config.fishTracker.stats.gil = config.fishTracker.stats.gil + item_quantity;
-								default_config[playerName].Fishing.stats.gil = default_config[playerName].Fishing.stats.gil + item_quantity;
+								config.settings.Fishing.stats.gil = config.settings.Fishing.stats.gil + item_quantity;
 							else
 								config.fishTracker.stats.item = config.fishTracker.stats.item + item_quantity;
-								default_config[playerName].Fishing.stats.item = default_config[playerName].Fishing.stats.item + item_quantity;
+								config.settings.Fishing.stats.item = config.settings.Fishing.stats.item + item_quantity;
 							end
 							break
 						  end
@@ -441,7 +435,7 @@ ashita.events.register('packet_out', 'packet_out_cb', function(e) -- id, size, d
          config.Status = 'FISHING';
          config.fishTracker.show = true;
          config.fishTracker.stats.casts = config.fishTracker.stats.casts + 1;
-			default_config[playerName].Fishing.stats.casts = default_config[playerName].Fishing.stats.casts + 1;
+			config.settings.Fishing.stats.casts = config.settings.Fishing.stats.casts + 1;
          settings.save();
       end
 	end
@@ -454,7 +448,7 @@ ashita.events.register('packet_out', 'packet_out_cb', function(e) -- id, size, d
 		if (newpacket[0x0E+1] == 0x04) then
 			config.Status = nil;
 			config.fishTracker.stats.canceled = config.fishTracker.stats.canceled + 1;
-			default_config[playerName].Fishing.stats.canceled = default_config[playerName].Fishing.stats.canceled + 1;
+			config.settings.Fishing.stats.canceled = config.settings.Fishing.stats.canceled + 1;
          settings.save();
 		end
 	end
