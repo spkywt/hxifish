@@ -290,46 +290,6 @@ ashita.events.register('text_in', 'text_in_cb', function(e)
 			config.Status = nil;
 		end
 		
-		--[[ Update chat log message with skill up chance (fish only)
-		if (fishSuccess and not monster) then
-			local catch = (message):gsub("(.*) " .. playerName .. " caught ", ""):gsub("a ", ""):gsub("2 ",""):gsub("3 ",""):gsub("!","");
-			local catchLevel = FishLvls[catch] or FishLvls[(catch):sub(1,-2)] or 0;
-			if (catchLevel == 0) then return false; end
-			local fishingSkill = player:GetCraftSkill(0):GetSkill();
-			local lvldiff = catchLevel - fishingSkill;
-			if (lvldiff <= 0 or lvldiff >= 50) then return false; end
-			
-			local normdist = math.exp(-0.5 * math.log(2 * math.pi) - math.log(5) - math.pow(lvldiff - 11, 2) / 50);
-			local distmod = math.floor(normdist * 200);
-			local lowerLevelBonus = math.floor((100 - fishingSkill) / 10);
-			local skillLevelPenalty = math.floor(fishingSkill / 10);
-			local maxChance = math.max(4, distmod + lowerLevelBonus - skillLevelPenalty);
-			
-			local vanadate = ashita.ffxi.vanatime.get_current_date();
-			local moonPercent = vanadate.moon_percent;
-			local timestamp = ashita.ffxi.vanatime.get_raw_timestamp();
-			local ts = (timestamp + 92514960) * 25;
-			local day = math.floor(ts / 86400);
-			local mphase = (day + 26) % 84;
-			local waxing = mphase > 41;
-			local waning = mphase < 41;
-			
-			local skillRoll = 90;
-			local isCity = ZoneType[party:GetMemberZone(0)] == 1 or false;
-			if     (moonPercent == 0)   then skillRoll = skillRoll - 20; -- new
-			elseif (moonPercent == 100) then skillRoll = skillRoll + 20; -- full
-			elseif (waning and moonPercent <= 10) then skillRoll = skillRoll - 15;
-			elseif (waning and moonPercent >= 95) then skillRoll = skillRoll +  5;
-			elseif (waxing and moonPercent <=  5) then skillRoll = skillRoll - 10;
-			elseif (not isCity) then skillRoll = skillRoll - 10;
-			elseif (fishingSkill < 50) then skillRoll = skillRoll - (20 - math.floor(fishingSkill / 3));
-			end
-			
-			local skillUpChance = (maxChance - 1) / skillRoll * 100;
-			message = string.format('%s (skill chance: %.2f%%)', originalmsg, skillUpChance);
-			return message;
-		end
-      ]]--
 	end
 	
     return false;
