@@ -26,7 +26,7 @@
 addon.author   = 'Espe (spkywt)';
 addon.name     = 'hxifish';
 addon.desc     = 'Tracker for fishing statistics.';
-addon.version  = '1.0.0';
+addon.version  = '1.0.1';
 
 -- Ashita Libs
 require 'common'
@@ -397,19 +397,22 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
 		local param1   = struct.unpack('H', packet, 0x0C + 1);
 		local param2   = struct.unpack('H', packet, 0x10 + 1);
       
-		if (message == 38) then
-			if (get_skill_level(param1) == nil) then set_skill_level(param1); end
-			set_skill_level(param1, get_skill_level(param1) + tonumber(param2 / 10));
-         settings.save();
-		end
-      
-		if (message == 53) then
-			if (get_skill_level(param1) == nil) then set_skill_level(param1); end
-			if (get_skill_level(param1) < tonumber(param2)) then
-				set_skill_level(param1, tonumber(param2));
+      -- Restrict to Fishing Skillups for now
+      if (param1 == 48) then
+         if (message == 38) then
+            if (get_skill_level(param1) == nil) then set_skill_level(param1); end
+            set_skill_level(param1, get_skill_level(param1) + tonumber(param2 / 10));
             settings.save();
-			end
-		end
+         end
+         
+         if (message == 53) then
+            if (get_skill_level(param1) == nil) then set_skill_level(param1); end
+            if (get_skill_level(param1) < tonumber(param2)) then
+               set_skill_level(param1, tonumber(param2));
+               settings.save();
+            end
+         end
+      end
 	end
 	
 	-- Zone IN / Zone Out
