@@ -284,8 +284,6 @@ ashita.events.register('text_in', 'text_in_cb', function(e)
 				config.settings.Fishing.stats.monster = config.settings.Fishing.stats.monster + 1;
 			end
 			
-			config.fishTracker.stats.casts = config.fishTracker.stats.casts + 1;
-			config.settings.Fishing.stats.casts = config.settings.Fishing.stats.casts + 1;
 			config.Status = nil;
 		end
       
