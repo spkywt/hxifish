@@ -23,7 +23,7 @@
 * No warranties are given.
 ]]--
 
-addon.author   = 'spkywt';
+addon.author   = 'Espe (spkywt)';
 addon.name     = 'hxifish';
 addon.desc     = 'Tracker for fishing statistics.';
 addon.version  = '1.0.0';
