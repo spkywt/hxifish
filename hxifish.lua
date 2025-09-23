@@ -26,7 +26,7 @@
 addon.author   = 'Espe (spkywt)';
 addon.name     = 'hxifish';
 addon.desc     = 'Tracker for fishing statistics.';
-addon.version  = '1.0.2';
+addon.version  = '1.0.3';
 
 -- Ashita Libs
 require 'common'
@@ -88,10 +88,10 @@ local function ShowFishingTracker()
 		local FishingSkillMax = (player:GetCraftSkill(0):GetRank() + 1) * 10;
 		local DisplaySkill = FishingSkill .. ' / ' .. FishingSkillMax;
 		if (FishingSkillMax == FishingSkill) then
-			imgui.PushStyleColor(ImGuiCol_Text, 1, 0, 0, 1);
+			imgui.PushStyleColor(ImGuiCol_Text, {1, 0, 0, 1});
 			DisplaySkill = DisplaySkill .. ' MAXED';
 		elseif (FishingSkillMax - FishingSkill <= 2) then 
-			imgui.PushStyleColor(ImGuiCol_Text, 0, 1, 0, 1);
+			imgui.PushStyleColor(ImGuiCol_Text, {0, 1, 0, 1});
 			DisplaySkill = DisplaySkill .. ' RANK QUEST';
 		else imgui.PushStyleColor(ImGuiCol_Text, {1, 1, 1, 1});
 		end
