@@ -1,0 +1,143 @@
+require('common')
+
+local fishdata = T{ }
+fishdata["Gil"] = T{ fishid = 65535, skill_level = 1, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 0, sell_price = 0, item = 1 }
+fishdata["Rusty Bucket"] = T{ fishid = 90, skill_level = 1, water_type = "Fresh", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 1, sell_price = 51, item = 1 }
+fishdata["Bibiki Urchin"] = T{ fishid = 4318, skill_level = 3, water_type = "Salt", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 12, sell_price = 750, item = 0 }
+fishdata["Lamp Marimo"] = T{ fishid = 2216, skill_level = 3, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 12, sell_price = 786, item = 0 }
+fishdata["Pamtam Kelp"] = T{ fishid = 624, skill_level = 3, water_type = "Fresh", catch_size = "Small", minimum_rod = "Carbon Fishing Rod", stackSize = 12, sell_price = 8, item = 1 }
+fishdata["Phanauet Newt"] = T{ fishid = 5125, skill_level = 4, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 1, sell_price = 4, item = 0 }
+fishdata["Arrowwood Log"] = T{ fishid = 688, skill_level = 4, water_type = "Fresh", catch_size = "Big", minimum_rod = "Mithran Fishing Rod", min_length = 1, max_length = 3, min_weight = 4, max_weight = 5, stackSize = 12, sell_price = 5, item = 1 }
+fishdata["Rusty Subligar"] = T{ fishid = 14242, skill_level = 5, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 1, sell_price = 15, item = 1 }
+fishdata["Denizanasi"] = T{ fishid = 5447, skill_level = 5, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 7, item = 1 }
+fishdata["Cobalt Jellyfish"] = T{ fishid = 4443, skill_level = 5, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 8, item = 1 }
+fishdata["Adoulinian Kelp"] = T{ fishid = 3965, skill_level = 6, water_type = "Fresh", catch_size = "Small", minimum_rod = "Carbon Fishing Rod", stackSize = 12, sell_price = 0, item = 1 }
+fishdata["Hydrogauge"] = T{ fishid = 2341, skill_level = 7, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 1, sell_price = 0, item = 1 }
+fishdata["Crayfish"] = T{ fishid = 4472, skill_level = 7, water_type = "Fresh", catch_size = "Small", minimum_rod = "Bamboo Fishing Rod", stackSize = 12, sell_price = 10, item = 0 }
+fishdata["Fish Scale Shield"] = T{ fishid = 12316, skill_level = 7, water_type = "Fresh", catch_size = "Small", minimum_rod = "Carbon Fishing Rod", stackSize = 1, sell_price = 384, item = 1 }
+fishdata["Rusty Leggings"] = T{ fishid = 14117, skill_level = 7, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 1, sell_price = 12, item = 1 }
+fishdata["Bibikibo"] = T{ fishid = 4314, skill_level = 8, water_type = "Salt", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 12, sell_price = 99, item = 0 }
+fishdata["Bastore Sardine"] = T{ fishid = 4360, skill_level = 9, water_type = "Fresh", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 12, sell_price = 9, item = 0 }
+fishdata["Hamsi"] = T{ fishid = 5449, skill_level = 9, water_type = "Fresh", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 12, sell_price = 7, item = 0 }
+fishdata["Moat Carp"] = T{ fishid = 4401, skill_level = 11, water_type = "Fresh", catch_size = "Small", minimum_rod = "Fastwater Fishing Rod", stackSize = 12, sell_price = 10, item = 0 }
+fishdata["Bastore Sweeper"] = T{ fishid = 5473, skill_level = 12, water_type = "Fresh", catch_size = "Small", minimum_rod = "Ebisu Fishing Rod", stackSize = 12, sell_price = 93, item = 0 }
+fishdata["Greedie"] = T{ fishid = 4500, skill_level = 14, water_type = "Salt", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 12, sell_price = 11, item = 0 }
+fishdata["Norg Shell"] = T{ fishid = 1135, skill_level = 14, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 1, sell_price = 500, item = 1 }
+fishdata["Copper Frog"] = T{ fishid = 4515, skill_level = 16, water_type = "Fresh", catch_size = "Small", minimum_rod = "Tarutaru Fishing Rod", stackSize = 12, sell_price = 20, item = 0 }
+fishdata["Yellow Globe"] = T{ fishid = 4403, skill_level = 17, water_type = "Fresh", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 12, sell_price = 20, item = 0 }
+fishdata["Muddy Siredon"] = T{ fishid = 5126, skill_level = 18, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 1, sell_price = 0, item = 0 }
+fishdata["Quus"] = T{ fishid = 4514, skill_level = 19, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 12, sell_price = 20, item = 0 }
+fishdata["Damp Scroll"] = T{ fishid = 1210, skill_level = 20, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 1, sell_price = 1, item = 1 }
+fishdata["Tiny Goldfish"] = T{ fishid = 4310, skill_level = 20, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 12, sell_price = 1, item = 0 }
+fishdata["Ripped cap"] = T{ fishid = 591, skill_level = 20, water_type = "Fresh", catch_size = "Small", minimum_rod = "Carbon Fishing Rod", stackSize = 1, sell_price = 0, item = 1 }
+fishdata["Forest Carp"] = T{ fishid = 4289, skill_level = 20, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 22, item = 0 }
+fishdata["Cheval Salmon"] = T{ fishid = 4379, skill_level = 21, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 20, item = 0 }
+fishdata["Copper ring"] = T{ fishid = 13454, skill_level = 24, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 1, sell_price = 19, item = 1 }
+fishdata["Fat Greedie"] = T{ fishid = 4501, skill_level = 24, water_type = "Salt", catch_size = "Small", minimum_rod = "Glass Fiber Fishing Rod", stackSize = 1, sell_price = 0, item = 0 }
+fishdata["Gurnard"] = T{ fishid = 5132, skill_level = 26, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 12, sell_price = 475, item = 0 }
+fishdata["Moorish Idol"] = T{ fishid = 5121, skill_level = 26, water_type = "Salt", catch_size = "Small", minimum_rod = "Tarutaru Fishing Rod", stackSize = 12, sell_price = 242, item = 0 }
+fishdata["Nebimonite"] = T{ fishid = 4361, skill_level = 27, water_type = "Salt", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 12, sell_price = 52, item = 0 }
+fishdata["Tricolored Carp"] = T{ fishid = 4426, skill_level = 27, water_type = "Fresh", catch_size = "Small", minimum_rod = "Carbon Fishing Rod", stackSize = 12, sell_price = 52, item = 0 }
+fishdata["Blindfish"] = T{ fishid = 4313, skill_level = 28, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 229, item = 0 }
+fishdata["Pipira"] = T{ fishid = 4464, skill_level = 29, water_type = "Fresh", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 12, sell_price = 46, item = 0 }
+fishdata["Tiger Cod"] = T{ fishid = 4483, skill_level = 29, water_type = "Fresh", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 12, sell_price = 52, item = 0 }
+fishdata["Mithra Snare"] = T{ fishid = 5330, skill_level = 30, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 1, sell_price = 0, item = 1 }
+fishdata["Tarutaru Snare"] = T{ fishid = 5329, skill_level = 30, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 1, sell_price = 0, item = 1 }
+fishdata["Rusty Cap"] = T{ fishid = 12522, skill_level = 30, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 1, sell_price = 97, item = 1 }
+fishdata["Caedarva Frog"] = T{ fishid = 5465, skill_level = 30, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 12, sell_price = 100, item = 0 }
+fishdata["Elshimo Frog"] = T{ fishid = 4290, skill_level = 30, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 12, sell_price = 52, item = 0 }
+fishdata["Yayinbaligi"] = T{ fishid = 5463, skill_level = 31, water_type = "Fresh", catch_size = "Big", minimum_rod = "Single Hook Fishing Rod", min_length = 40, max_length = 130, min_weight = 186, max_weight = 206, stackSize = 1, sell_price = 225, item = 0 }
+fishdata["Giant Catfish"] = T{ fishid = 4469, skill_level = 31, water_type = "Fresh", catch_size = "Big", minimum_rod = "Single Hook Fishing Rod", min_length = 40, max_length = 130, min_weight = 186, max_weight = 206, stackSize = 1, sell_price = 102, item = 0 }
+fishdata["Lungfish"] = T{ fishid = 4315, skill_level = 32, water_type = "Fresh", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 12, sell_price = 231, item = 0 }
+fishdata["Dark Bass"] = T{ fishid = 4428, skill_level = 33, water_type = "Fresh", catch_size = "Small", minimum_rod = "Carbon Fishing Rod", stackSize = 12, sell_price = 20, item = 0 }
+fishdata["Silver Ring"] = T{ fishid = 13456, skill_level = 34, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 1, sell_price = 250, item = 1 }
+fishdata["Ogre Eel"] = T{ fishid = 4481, skill_level = 35, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 32, item = 0 }
+fishdata["Crystal Bass"] = T{ fishid = 4528, skill_level = 35, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 0, item = 0 }
+fishdata["Veydal Wrasse"] = T{ fishid = 5141, skill_level = 35, water_type = "Fresh", catch_size = "Big", minimum_rod = "Ebisu Fishing Rod", min_length = 40, max_length = 125, min_weight = 186, max_weight = 206, stackSize = 1, sell_price = 420, item = 0 }
+fishdata["Alabaligi"] = T{ fishid = 5461, skill_level = 37, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 98, item = 0 }
+fishdata["Shining Trout"] = T{ fishid = 4354, skill_level = 37, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 26, item = 0 }
+fishdata["Istavrit"] = T{ fishid = 5136, skill_level = 37, water_type = "Fresh", catch_size = "Big", minimum_rod = "Clothespole", min_length = 10, max_length = 20, min_weight = 46, max_weight = 51, stackSize = 1, sell_price = 100, item = 0 }
+fishdata["Nosteau Herring"] = T{ fishid = 4482, skill_level = 39, water_type = "Fresh", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 12, sell_price = 80, item = 0 }
+fishdata["Rusty Pick"] = T{ fishid = 16655, skill_level = 40, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 1, sell_price = 115, item = 1 }
+fishdata["Coral Butterfly"] = T{ fishid = 4580, skill_level = 40, water_type = "Fresh", catch_size = "Small", minimum_rod = "Lu Shang's Fishing Rod", stackSize = 1, sell_price = 127, item = 0 }
+fishdata["Lakerda"] = T{ fishid = 5450, skill_level = 41, water_type = "Fresh", catch_size = "Big", minimum_rod = "Single Hook Fishing Rod", min_length = 55, max_length = 100, min_weight = 255, max_weight = 283, stackSize = 1, sell_price = 103, item = 0 }
+fishdata["Gugru Tuna"] = T{ fishid = 4480, skill_level = 41, water_type = "Salt", catch_size = "Big", minimum_rod = "Single Hook Fishing Rod", min_length = 40, max_length = 120, min_weight = 186, max_weight = 206, stackSize = 1, sell_price = 100, item = 0 }
+fishdata["Brass Loach"] = T{ fishid = 5469, skill_level = 42, water_type = "Fresh", catch_size = "Small", minimum_rod = "Ebisu Fishing Rod", stackSize = 12, sell_price = 276, item = 0 }
+fishdata["Zafmlug Bass"] = T{ fishid = 4385, skill_level = 43, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 31, item = 0 }
+fishdata["Istakoz"] = T{ fishid = 5453, skill_level = 46, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 200, item = 0 }
+fishdata["Gold Lobster"] = T{ fishid = 4383, skill_level = 46, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 194, item = 0 }
+fishdata["Black Eel"] = T{ fishid = 4429, skill_level = 47, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 192, item = 0 }
+fishdata["Yilanbaligi"] = T{ fishid = 5458, skill_level = 47, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 200, item = 0 }
+fishdata["Kalamar"] = T{ fishid = 5448, skill_level = 48, water_type = "Fresh", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 12, sell_price = 170, item = 0 }
+fishdata["Cone Calamary"] = T{ fishid = 5128, skill_level = 48, water_type = "Fresh", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 12, sell_price = 165, item = 0 }
+fishdata["Icefish"] = T{ fishid = 4470, skill_level = 49, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 156, item = 0 }
+fishdata["Sandfish"] = T{ fishid = 4291, skill_level = 50, water_type = "Fresh", catch_size = "Small", minimum_rod = "Carbon Fishing Rod", stackSize = 12, sell_price = 26, item = 0 }
+fishdata["Giant Donko"] = T{ fishid = 4306, skill_level = 50, water_type = "Fresh", catch_size = "Big", minimum_rod = "Composite Fishing Rod", min_length = 45, max_length = 150, min_weight = 209, max_weight = 231, stackSize = 1, sell_price = 195, item = 0 }
+fishdata["Monke-Onke"] = T{ fishid = 4462, skill_level = 51, water_type = "Fresh", catch_size = "Big", minimum_rod = "Mithran Fishing Rod", min_length = 45, max_length = 115, min_weight = 209, max_weight = 231, stackSize = 1, sell_price = 306, item = 0 }
+fishdata["Kaplumbaga"] = T{ fishid = 5464, skill_level = 53, water_type = "Fresh", catch_size = "Small", minimum_rod = "Glass Fiber Fishing Rod", stackSize = 12, sell_price = 830, item = 0 }
+fishdata["Red Terrapin"] = T{ fishid = 4402, skill_level = 53, water_type = "Fresh", catch_size = "Small", minimum_rod = "Glass Fiber Fishing Rod", stackSize = 12, sell_price = 306, item = 0 }
+fishdata["Vongola Clam"] = T{ fishid = 5131, skill_level = 53, water_type = "Salt", catch_size = "Small", minimum_rod = "Carbon Fishing Rod", stackSize = 12, sell_price = 192, item = 0 }
+fishdata["Shall Shell"] = T{ fishid = 4484, skill_level = 53, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 300, item = 0 }
+fishdata["Istiridye"] = T{ fishid = 5456, skill_level = 53, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 279, item = 0 }
+fishdata["Moblin Mask"] = T{ fishid = 1638, skill_level = 54, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 12, sell_price = 0, item = 1 }
+fishdata["Bugbear Mask"] = T{ fishid = 1624, skill_level = 54, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 12, sell_price = 0, item = 1 }
+fishdata["Bluetail"] = T{ fishid = 4399, skill_level = 55, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 300, item = 0 }
+fishdata["Uskumru"] = T{ fishid = 5452, skill_level = 55, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 300, item = 0 }
+fishdata["Sazanbaligi"] = T{ fishid = 5459, skill_level = 56, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 300, item = 0 }
+fishdata["Gold Carp"] = T{ fishid = 4427, skill_level = 56, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 289, item = 0 }
+fishdata["Trilobite"] = T{ fishid = 4317, skill_level = 59, water_type = "Salt", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 40, item = 0 }
+fishdata["Rusty Greatsword"] = T{ fishid = 16606, skill_level = 60, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 1, sell_price = 86, item = 1 }
+fishdata["Elshimo Newt"] = T{ fishid = 4579, skill_level = 60, water_type = "Fresh", catch_size = "Small", minimum_rod = "Lu Shang's Fishing Rod", stackSize = 1, sell_price = 179, item = 0 }
+fishdata["Bhefhel Marlin"] = T{ fishid = 4479, skill_level = 61, water_type = "Fresh", catch_size = "Big", minimum_rod = "Composite Fishing Rod", min_length = 60, max_length = 140, min_weight = 279, max_weight = 309, stackSize = 1, sell_price = 307, item = 0 }
+fishdata["Kilicbaligi"] = T{ fishid = 5451, skill_level = 62, water_type = "Fresh", catch_size = "Big", minimum_rod = "Composite Fishing Rod", min_length = 1, max_length = 1, min_weight = 4, max_weight = 5, stackSize = 1, sell_price = 450, item = 0 }
+fishdata["Trumpet Shell"] = T{ fishid = 5466, skill_level = 63, water_type = "Fresh", catch_size = "Small", minimum_rod = "Ebisu Fishing Rod", stackSize = 12, sell_price = 512, item = 0 }
+fishdata["Noble Lady"] = T{ fishid = 4485, skill_level = 66, water_type = "Salt", catch_size = "Small", minimum_rod = "Carbon Fishing Rod", stackSize = 12, sell_price = 400, item = 0 }
+fishdata["Betta"] = T{ fishid = 5139, skill_level = 68, water_type = "Fresh", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 12, sell_price = 400, item = 0 }
+fishdata["Crescent Fish"] = T{ fishid = 4473, skill_level = 69, water_type = "Fresh", catch_size = "Small", minimum_rod = "Carbon Fishing Rod", stackSize = 12, sell_price = 403, item = 0 }
+fishdata["Bladefish"] = T{ fishid = 4471, skill_level = 71, water_type = "Fresh", catch_size = "Big", minimum_rod = "Composite Fishing Rod", min_length = 40, max_length = 120, min_weight = 186, max_weight = 206, stackSize = 1, sell_price = 408, item = 0 }
+fishdata["Zebra Eel"] = T{ fishid = 4288, skill_level = 71, water_type = "Fresh", catch_size = "Small", minimum_rod = "Lu Shang's Fishing Rod", stackSize = 12, sell_price = 385, item = 0 }
+fishdata["Rhinochimera"] = T{ fishid = 5135, skill_level = 72, water_type = "Fresh", catch_size = "Big", minimum_rod = "Composite Fishing Rod", min_length = 10, max_length = 90, min_weight = 46, max_weight = 51, stackSize = 1, sell_price = 613, item = 0 }
+fishdata["Coral Fragment"] = T{ fishid = 887, skill_level = 74, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 12, sell_price = 1750, item = 1 }
+fishdata["Tavnazian Goby"] = T{ fishid = 5130, skill_level = 75, water_type = "Fresh", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 12, sell_price = 400, item = 0 }
+fishdata["Kayabaligi"] = T{ fishid = 5460, skill_level = 75, water_type = "Fresh", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 12, sell_price = 310, item = 0 }
+fishdata["Silver Shark"] = T{ fishid = 4451, skill_level = 76, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 500, item = 0 }
+fishdata["Ca Cuong"] = T{ fishid = 5474, skill_level = 78, water_type = "Fresh", catch_size = "Small", minimum_rod = "Ebisu Fishing Rod", stackSize = 12, sell_price = 560, item = 0 }
+fishdata["Three-Eyed Fish"] = T{ fishid = 4478, skill_level = 79, water_type = "Fresh", catch_size = "Big", minimum_rod = "Ebisu Fishing Rod", min_length = 50, max_length = 120, min_weight = 232, max_weight = 257, stackSize = 1, sell_price = 512, item = 0 }
+fishdata["Jungle Catfish"] = T{ fishid = 4307, skill_level = 80, water_type = "Fresh", catch_size = "Big", minimum_rod = "Composite Fishing Rod", min_length = 40, max_length = 110, min_weight = 186, max_weight = 206, stackSize = 1, sell_price = 612, item = 0 }
+fishdata["Gigant Octopus"] = T{ fishid = 5475, skill_level = 80, water_type = "Fresh", catch_size = "Big", minimum_rod = "Ebisu Fishing Rod", min_length = 65, max_length = 170, min_weight = 302, max_weight = 334, stackSize = 1, sell_price = 238, item = 0 }
+fishdata["Gavial Fish"] = T{ fishid = 4477, skill_level = 81, water_type = "Fresh", catch_size = "Big", minimum_rod = "Composite Fishing Rod", min_length = 40, max_length = 130, min_weight = 186, max_weight = 206, stackSize = 1, sell_price = 500, item = 0 }
+fishdata["Garpike"] = T{ fishid = 5472, skill_level = 83, water_type = "Fresh", catch_size = "Small", minimum_rod = "Ebisu Fishing Rod", stackSize = 12, sell_price = 610, item = 0 }
+fishdata["Bastore Bream"] = T{ fishid = 4461, skill_level = 86, water_type = "Fresh", catch_size = "Small", minimum_rod = "Lu Shang's Fishing Rod", stackSize = 12, sell_price = 600, item = 0 }
+fishdata["Mercanbaligi"] = T{ fishid = 5454, skill_level = 86, water_type = "Fresh", catch_size = "Small", minimum_rod = "Lu Shang's Fishing Rod", stackSize = 12, sell_price = 600, item = 0 }
+fishdata["Megalodon"] = T{ fishid = 5467, skill_level = 87, water_type = "Fresh", catch_size = "Big", minimum_rod = "Ebisu Fishing Rod", min_length = 446, max_length = 625, min_weight = 2073, max_weight = 2296, stackSize = 1, sell_price = 864, item = 0 }
+fishdata["Black Ghost"] = T{ fishid = 5138, skill_level = 88, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 600, item = 0 }
+fishdata["Pirarucu"] = T{ fishid = 5470, skill_level = 89, water_type = "Fresh", catch_size = "Big", minimum_rod = "Ebisu Fishing Rod", min_length = 161, max_length = 210, min_weight = 748, max_weight = 829, stackSize = 1, sell_price = 901, item = 0 }
+fishdata["Mythril Dagger"] = T{ fishid = 16451, skill_level = 90, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 1, sell_price = 1431, item = 1 }
+fishdata["Mythril Sword"] = T{ fishid = 16537, skill_level = 90, water_type = "Fresh", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 1, sell_price = 4100, item = 1 }
+fishdata["Ahtapot"] = T{ fishid = 5455, skill_level = 90, water_type = "Fresh", catch_size = "Big", minimum_rod = "Ebisu Fishing Rod", min_length = 55, max_length = 145, min_weight = 255, max_weight = 283, stackSize = 1, sell_price = 700, item = 0 }
+fishdata["Grimmonite"] = T{ fishid = 4304, skill_level = 90, water_type = "Fresh", catch_size = "Big", minimum_rod = "Ebisu Fishing Rod", min_length = 55, max_length = 145, min_weight = 255, max_weight = 283, stackSize = 1, sell_price = 717, item = 0 }
+fishdata["Emperor Fish"] = T{ fishid = 4454, skill_level = 91, water_type = "Fresh", catch_size = "Big", minimum_rod = "Composite Fishing Rod", min_length = 60, max_length = 180, min_weight = 279, max_weight = 309, stackSize = 1, sell_price = 615, item = 0 }
+fishdata["Gigant Squid"] = T{ fishid = 4474, skill_level = 91, water_type = "Fresh", catch_size = "Big", minimum_rod = "Composite Fishing Rod", min_length = 80, max_length = 170, min_weight = 372, max_weight = 412, stackSize = 1, sell_price = 612, item = 0 }
+fishdata["Morinabaligi"] = T{ fishid = 5462, skill_level = 94, water_type = "Fresh", catch_size = "Small", minimum_rod = "Lu Shang's Fishing Rod", stackSize = 1, sell_price = 548, item = 0 }
+fishdata["Dil"] = T{ fishid = 5457, skill_level = 96, water_type = "Fresh", catch_size = "Small", minimum_rod = "Lu Shang's Fishing Rod", stackSize = 12, sell_price = 700, item = 0 }
+fishdata["Black Sole"] = T{ fishid = 4384, skill_level = 96, water_type = "Fresh", catch_size = "Small", minimum_rod = "Lu Shang's Fishing Rod", stackSize = 12, sell_price = 700, item = 0 }
+fishdata["Pterygotus"] = T{ fishid = 5133, skill_level = 99, water_type = "Fresh", catch_size = "Big", minimum_rod = "Composite Fishing Rod", min_length = 25, max_length = 260, min_weight = 116, max_weight = 128, stackSize = 1, sell_price = 750, item = 0 }
+fishdata["Sea Zombie"] = T{ fishid = 4475, skill_level = 100, water_type = "Salt", catch_size = "Legendary", minimum_rod = "Ebisu Fishing Rod", min_length = 80, max_length = 195, min_weight = 372, max_weight = 412, stackSize = 1, sell_price = 628, item = 0 }
+fishdata["Titanictus"] = T{ fishid = 4476, skill_level = 101, water_type = "Salt", catch_size = "Legendary", minimum_rod = "Ebisu Fishing Rod", min_length = 75, max_length = 210, min_weight = 348, max_weight = 386, stackSize = 1, sell_price = 700, item = 0 }
+fishdata["Takitaro"] = T{ fishid = 4463, skill_level = 101, water_type = "Fresh", catch_size = "Legendary", minimum_rod = "Ebisu Fishing Rod", min_length = 55, max_length = 130, min_weight = 255, max_weight = 283, stackSize = 1, sell_price = 714, item = 0 }
+fishdata["Turnabaligi"] = T{ fishid = 5137, skill_level = 104, water_type = "Fresh", catch_size = "Big", minimum_rod = "Composite Fishing Rod", min_length = 65, max_length = 175, min_weight = 302, max_weight = 334, stackSize = 1, sell_price = 693, item = 0 }
+fishdata["Kalkanbaligi"] = T{ fishid = 5140, skill_level = 105, water_type = "Salt", catch_size = "Legendary", minimum_rod = "Ebisu Fishing Rod", min_length = 60, max_length = 120, min_weight = 279, max_weight = 309, stackSize = 1, sell_price = 780, item = 0 }
+fishdata["Armored Pisces"] = T{ fishid = 4316, skill_level = 108, water_type = "Fresh", catch_size = "Big", minimum_rod = "Single Hook Fishing Rod", min_length = 50, max_length = 125, min_weight = 232, max_weight = 257, stackSize = 1, sell_price = 969, item = 0 }
+fishdata["Giant Chirai"] = T{ fishid = 4308, skill_level = 110, water_type = "Fresh", catch_size = "Legendary", minimum_rod = "Ebisu Fishing Rod", min_length = 75, max_length = 170, min_weight = 348, max_weight = 386, stackSize = 1, sell_price = 1100, item = 0 }
+fishdata["Titanic Sawfish"] = T{ fishid = 5120, skill_level = 125, water_type = "Salt", catch_size = "Legendary", minimum_rod = "Ebisu Fishing Rod", min_length = 75, max_length = 210, min_weight = 348, max_weight = 386, stackSize = 1, sell_price = 1652, item = 0 }
+fishdata["Tricorn"] = T{ fishid = 4319, skill_level = 128, water_type = "Fresh", catch_size = "Legendary", minimum_rod = "Ebisu Fishing Rod", min_length = 105, max_length = 210, min_weight = 488, max_weight = 540, stackSize = 1, sell_price = 616, item = 0 }
+fishdata["Cave Cherax"] = T{ fishid = 4309, skill_level = 130, water_type = "Fresh", catch_size = "Legendary", minimum_rod = "Ebisu Fishing Rod", min_length = 115, max_length = 235, min_weight = 534, max_weight = 592, stackSize = 1, sell_price = 1600, item = 0 }
+fishdata["Gerrothorax"] = T{ fishid = 5471, skill_level = 134, water_type = "Fresh", catch_size = "Legendary", minimum_rod = "Ebisu Fishing Rod", min_length = 210, max_length = 250, min_weight = 976, max_weight = 1081, stackSize = 1, sell_price = 118, item = 0 }
+fishdata["Mola Mola"] = T{ fishid = 5134, skill_level = 135, water_type = "Salt", catch_size = "Legendary", minimum_rod = "Ebisu Fishing Rod", min_length = 110, max_length = 200, min_weight = 511, max_weight = 566, stackSize = 1, sell_price = 975, item = 0 }
+fishdata["Gugrusaurus"] = T{ fishid = 5127, skill_level = 140, water_type = "Salt", catch_size = "Legendary", minimum_rod = "Ebisu Fishing Rod", min_length = 145, max_length = 425, min_weight = 674, max_weight = 746, stackSize = 1, sell_price = 1760, item = 0 }
+fishdata["Lik"] = T{ fishid = 5129, skill_level = 140, water_type = "Fresh", catch_size = "Legendary", minimum_rod = "Ebisu Fishing Rod", min_length = 185, max_length = 465, min_weight = 860, max_weight = 952, stackSize = 1, sell_price = 1760, item = 0 }
+fishdata["Ryugu Titan"] = T{ fishid = 4305, skill_level = 150, water_type = "Salt", catch_size = "Legendary", minimum_rod = "Ebisu Fishing Rod", min_length = 200, max_length = 490, min_weight = 930, max_weight = 1030, stackSize = 1, sell_price = 1500, item = 0 }
+fishdata["Abaia"] = T{ fishid = 5476, skill_level = 150, water_type = "Fresh", catch_size = "Legendary", minimum_rod = "Ebisu Fishing Rod", min_length = 269, max_length = 317, min_weight = 1250, max_weight = 1385, stackSize = 1, sell_price = 1920, item = 0 }
+fishdata["Matsya"] = T{ fishid = 5468, skill_level = 150, water_type = "Fresh", catch_size = "Legendary", minimum_rod = "Ebisu Fishing Rod", min_length = 163, max_length = 331, min_weight = 757, max_weight = 839, stackSize = 1, sell_price = 25688, item = 0 }
+
+return fishdata

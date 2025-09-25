@@ -75,7 +75,7 @@ end
 -- desc: Shows a tooltip with ImGui.
 ----------------------------------------------------------------------------------------------------
 function get_skill_level(sID)
-	if (sID == 48) then
+	if (config.settings.TrackAllSkills or sID == 48) then
       if not (config.settings[SkillTypes[sID]]) then
          config.settings[SkillTypes[sID]] = { skill = nil };
       end
@@ -87,7 +87,7 @@ function get_skill_level(sID)
 end
 
 function set_skill_level(sID, newVal)
-	if (sID == 48) then
+	if (config.settings.TrackAllSkills or sID == 48) then
       local player = AshitaCore:GetMemoryManager():GetPlayer();
       local jobskill = player:GetCraftSkill(sID - 48):GetSkill()
       

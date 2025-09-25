@@ -26,7 +26,7 @@
 addon.author   = 'Espe (spkywt)';
 addon.name     = 'hxifish';
 addon.desc     = 'Tracker for fishing statistics.';
-addon.version  = '1.0.5';
+addon.version  = '1.0.6';
 
 -- Ashita Libs
 require 'common'
@@ -37,6 +37,7 @@ local settings    = require('settings');
 require 'constants'
 require 'helpers'
 local moon        = require('.\\data\\moon');
+local fishdata    = require('.\\data\\fishdata');
 
 ----------------------------------------------------------------------------------------------------
 -- func: settings
@@ -45,6 +46,7 @@ local moon        = require('.\\data\\moon');
 config = require('config');
 local default_settings =
 {
+   TrackAllSkills       = false;
    Fishing					=	{
       skill				   =	nil;
       stats				   =	{
@@ -193,12 +195,17 @@ ashita.events.register('command', 'command_cb', function(e)
    if (args[1]:any('/hxifish')) then
       if (#args == 1) then
          echo(addon.name, '/hxifish show         show tracker');
+         echo(addon.name, '/hxifish allskills    toggle tracking all skills');
          echo(addon.name, '/hxifish reset        clear all-time data');
          echo(addon.name, '/hxifish reload       reload addon');
          echo(addon.name, '/hxifish unload       unload addon');
       elseif (#args == 2) then
          if (args[2]:any('show')) then
             config.fishTracker.show = true;
+         elseif (args[2]:any('allskills')) then
+            config.settings.TrackAllSkills = not config.settings.TrackAllSkills;
+            settings.save();
+            echo(addon.name, 'Tracking all skills: ' .. tostring(config.settings.TrackAllSkills));
          elseif (args[2]:any('reload')) then
             AshitaCore:GetChatManager():QueueCommand(-1, string.format('/addon reload %s', addon.name));
          elseif (args[2]:any('unload')) then
@@ -363,7 +370,7 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
 		local param2   = struct.unpack('H', packet, 0x10 + 1);
       
       -- Restrict to Fishing Skillups for now
-      if (param1 == 48) then
+      if (config.settings.TrackAllSkills or param1 == 48) then
          if (message == 38) then
             if (get_skill_level(param1) == nil) then set_skill_level(param1); end
             set_skill_level(param1, get_skill_level(param1) + tonumber(param2 / 10));
