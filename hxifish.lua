@@ -211,25 +211,29 @@ local function EditItem()
       end
 		imgui.SameLine();
 		if (imgui.Button(' Save ')) then
-         -- Set Custom Price
-         config.fishing.customPrices[config.editItem.name] = config.editItem.newValue[1];
-         echo(addon.name,'Value for ' .. config.editItem.name ..
-                         ' set to ' .. tostring(config.editItem.newValue[1]));
-                         
-         -- Recalculate Gil Total
-         local recalc = 0;
-         for item_name, caught in pairs(config.fishing.session.history) do
-            local item_value = config.fishing.customPrices[item_name] or
-                               fishdata[item_name].ah_price or
-                               fishdata[item_name].sell_price;
-            recalc = recalc + (item_value * caught);
+         if (config.editItem.newValue[1] == config.editItem.oldValue) then
+            config.editItem.show = false;
+         else
+            -- Set Custom Price
+            config.fishing.customPrices[config.editItem.name] = config.editItem.newValue[1];
+            echo(addon.name,'Value for ' .. config.editItem.name ..
+                            ' set to ' .. tostring(config.editItem.newValue[1]));
+                            
+            -- Recalculate Gil Total
+            local recalc = 0;
+            for item_name, caught in pairs(config.fishing.session.history) do
+               local item_value = config.fishing.customPrices[item_name] or
+                                  fishdata[item_name].ah_price or
+                                  fishdata[item_name].sell_price;
+               recalc = recalc + (item_value * caught);
+            end
+            
+            -- Update Gph
+            config.fishing.session.gph.sum = recalc;
+            UpdateGph();
+            
+            config.editItem.show = false;
          end
-         
-         -- Update Gph
-         config.fishing.session.gph.sum = recalc;
-         UpdateGph();
-         
-         config.editItem.show = false;
       end
 		imgui.PopStyleColor(2);
     end
