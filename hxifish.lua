@@ -281,9 +281,6 @@ ashita.events.register('load', 'load_cb', function()
       config = res;
    else
       config = config:copy(true);
-      --pcall(function() settings.save('settings') end)
-      --settings.save();
-      --config = settings.load(config);
    end
 end);
 
