@@ -37,9 +37,10 @@ local settings          = require('settings');
 require 'constants'
 require 'helpers'
 --require 'packets'
-local config            = require('defaults');
 local moon              = require('.\\data\\moon');
 local fishdata          = require('.\\data\\fishdata');
+local defaults          = require('defaults');
+local config;
 
 
 ----------------------------------------------------------------------------------------------------
@@ -268,20 +269,16 @@ local function UpdateActivityTime()
 end
 
 
+
 ----------------------------------------------------------------------------------------------------
 -- func: load
 -- desc: Event called when the addon is being loaded.
 ----------------------------------------------------------------------------------------------------
 ashita.events.register('load', 'load_cb', function()
-   local ok, res = pcall(function()
-      return settings.load(config);
+   config = settings.load(defaults);
+   settings.register('settings', 'on_switch', function(newSettings)
+      config = newSettings
    end)
-   
-   if ok and type(res) == 'table' then
-      config = res;
-   else
-      config = require('defaults');
-   end
 end);
 
 
