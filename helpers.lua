@@ -71,38 +71,51 @@ function comma_value(amount)
 end
 
 ----------------------------------------------------------------------------------------------------
+-- func: format_time
+-- desc: show time as #h #m #s.
+----------------------------------------------------------------------------------------------------
+function format_time(sec)
+    sec = math.floor(sec or 0)
+
+    local h = math.floor(sec / 3600)
+    local m = math.floor((sec % 3600) / 60)
+    local s = sec % 60
+
+    local parts = {}
+    if h > 0 then table.insert(parts, string.format("%dh", h)) end
+    if m > 0 or h > 0 then table.insert(parts, string.format("%dm", m)) end
+    table.insert(parts, string.format("%ds", s))
+
+    return table.concat(parts, " ")
+end
+
+----------------------------------------------------------------------------------------------------
 -- func: get_skill_level // set_skill_level
 -- desc: Shows a tooltip with ImGui.
 ----------------------------------------------------------------------------------------------------
 function get_skill_level(sID)
-	if (config.settings.TrackAllSkills or sID == 48) then
-      if not (config.settings[SkillTypes[sID]]) then
-         config.settings[SkillTypes[sID]] = { skill = nil };
-      end
-   
-      return config.settings[SkillTypes[sID]].skill;
+   if not (config.settings[SkillTypes[sID]]) then
+      config.settings[SkillTypes[sID]] = { skill = nil };
    end
-   
-   return false;
+
+   return config.settings[SkillTypes[sID]].skill;
 end
 
 function set_skill_level(sID, newVal)
-	if (config.settings.TrackAllSkills or sID == 48) then
-      local player = AshitaCore:GetMemoryManager():GetPlayer();
-      local jobskill = player:GetCraftSkill(sID - 48):GetSkill()
-      
-		newVal = newVal or jobskill;
-      newVal = tonumber(string.format("%.1f", newVal));
-		config.settings[SkillTypes[sID]].skill = newVal;
-      
-		if (newVal < jobskill) then
-			config.settings[SkillTypes[sID]].skill = jobskill;
-		elseif ((newVal - 1.4) > jobskill) then
-			config.settings[SkillTypes[sID]].skill = jobskill;
-		end
-      
-      echo(SkillTypes[sID] .. ' Skill', '' .. config.settings[SkillTypes[sID]].skill);
-	end
+   local player = AshitaCore:GetMemoryManager():GetPlayer();
+   local jobskill = player:GetCraftSkill(sID - 48):GetSkill()
+   
+   newVal = newVal or jobskill;
+   newVal = tonumber(string.format("%.1f", newVal));
+   config.settings[SkillTypes[sID]].skill = newVal;
+   
+   if (newVal < jobskill) then
+      config.settings[SkillTypes[sID]].skill = jobskill;
+   elseif ((newVal - 1.4) > jobskill) then
+      config.settings[SkillTypes[sID]].skill = jobskill;
+   end
+   
+   echo(SkillTypes[sID] .. ' Skill', '' .. config.settings[SkillTypes[sID]].skill);
 end
 
 ----------------------------------------------------------------------------------------------------

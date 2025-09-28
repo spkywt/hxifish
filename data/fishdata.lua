@@ -19,7 +19,7 @@ fishdata["Rusty Leggings"] = T{ fishid = 14117, skill_level = 7, water_type = "F
 fishdata["Bibikibo"] = T{ fishid = 4314, skill_level = 8, water_type = "Salt", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 12, sell_price = 99, item = 0 }
 fishdata["Bastore Sardine"] = T{ fishid = 4360, skill_level = 9, water_type = "Fresh", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 12, sell_price = 9, item = 0 }
 fishdata["Hamsi"] = T{ fishid = 5449, skill_level = 9, water_type = "Fresh", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 12, sell_price = 7, item = 0 }
-fishdata["Moat Carp"] = T{ fishid = 4401, skill_level = 11, water_type = "Fresh", catch_size = "Small", minimum_rod = "Fastwater Fishing Rod", stackSize = 12, sell_price = 10, item = 0 }
+fishdata["Moat Carp"] = T{ fishid = 4401, skill_level = 11, water_type = "Fresh", catch_size = "Small", minimum_rod = "Fastwater Fishing Rod", stackSize = 12, sell_price = 10, item = 0, ah_price = 250 }
 fishdata["Bastore Sweeper"] = T{ fishid = 5473, skill_level = 12, water_type = "Fresh", catch_size = "Small", minimum_rod = "Ebisu Fishing Rod", stackSize = 12, sell_price = 93, item = 0 }
 fishdata["Greedie"] = T{ fishid = 4500, skill_level = 14, water_type = "Salt", catch_size = "Small", minimum_rod = "Hume Fishing Rod", stackSize = 12, sell_price = 11, item = 0 }
 fishdata["Norg Shell"] = T{ fishid = 1135, skill_level = 14, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 1, sell_price = 500, item = 1 }
