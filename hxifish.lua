@@ -36,10 +36,10 @@ local settings          = require('settings');
 -- Addon Custom Files
 require 'constants'
 require 'helpers'
-require 'packets'
+--require 'packets'
 local moon              = require('.\\data\\moon');
 local fishdata          = require('.\\data\\fishdata');
-config                  = require('defaults');
+local config            = require('defaults');
 
 
 ----------------------------------------------------------------------------------------------------
@@ -63,7 +63,7 @@ local function FishingTracker()
 		-- Current Fishing Skill
 		imgui.Text('Skill:');
 		imgui.SameLine();
-		local FishingSkill = config.fishing.skill;
+		local FishingSkill = config.Fishing.skill;
       local player = AshitaCore:GetMemoryManager():GetPlayer();
 		if (FishingSkill == nil) then FishingSkill = player:GetCraftSkill(0):GetSkill(); end
 		local FishingSkillMax = (player:GetCraftSkill(0):GetRank() + 1) * 10;
@@ -88,8 +88,8 @@ local function FishingTracker()
 		-- Stats
 		imgui.TextColored({1.0, 1.0, 0.4, 1.0},'Category     Session  All-Time');
 		imgui.Separator();
-		local var_stats = config.fishing.session;
-		local cfg_stats = config.fishing.alltime;
+		local var_stats = config.Fishing.session;
+		local cfg_stats = config.Fishing.alltime;
 		imgui.Text('Casts:       ' .. string.format("%-9s",var_stats.casts) .. cfg_stats.casts);
       imgui.Text('Fish:        ' .. string.format("%-9s",var_stats.fish) .. cfg_stats.fish);
 		imgui.Text('Item:        ' .. string.format("%-9s",var_stats.item) .. cfg_stats.item);
@@ -101,12 +101,12 @@ local function FishingTracker()
 		imgui.Text('Rod Break:   ' .. string.format("%-9s",var_stats.rodBreak) .. cfg_stats.rodBreak);
 		imgui.Text('Line Break:  ' .. string.format("%-9s",var_stats.lineBreak) .. cfg_stats.lineBreak);
 		imgui.Separator();
-      local displaytime = config.fishing.session.gph.totalTime + ((config.fishing.session.gph.lastAction ~= 0) and (ashita.time.clock()['s'] - config.fishing.session.gph.lastAction) or 0);
+      local displaytime = config.Fishing.session.gph.totalTime + ((config.Fishing.session.gph.lastAction ~= 0) and (ashita.time.clock()['s'] - config.Fishing.session.gph.lastAction) or 0);
       imgui.Text('Time:        ' .. format_time(displaytime));
-      imgui.Text('Gil:         ' .. comma_value(config.fishing.session.gph.sum));
-      imgui.Text('gph:         ' .. comma_value(config.fishing.session.gph.value));
-      if (config.fishing.session.gph.lastAction == 0 and config.fishing.session.gph.totalTime > 0) then
-         local pausemsg = 'Paused due to inactivity > ' .. tostring(config.fishing.session.gph.timeOut / 60) .. 'm'
+      imgui.Text('Gil:         ' .. comma_value(config.Fishing.session.gph.sum));
+      imgui.Text('gph:         ' .. comma_value(config.Fishing.session.gph.value));
+      if (config.Fishing.session.gph.lastAction == 0 and config.Fishing.session.gph.totalTime > 0) then
+         local pausemsg = 'Paused due to inactivity > ' .. tostring(config.Fishing.session.gph.timeOut / 60) .. 'm'
          imgui.TextColored({1.0, 0.2, 0.2, 1.0}, pausemsg);
       end
 		imgui.Separator();
@@ -117,8 +117,8 @@ local function FishingTracker()
 			imgui.SameLine();
 			show_help(imgui, 'Clear affects catch history\nClick item to change settings');
 			imgui.Separator();
-			if (config.fishing.session.history) then
-            for item_name, caught in pairs(config.fishing.session.history) do
+			if (config.Fishing.session.history) then
+            for item_name, caught in pairs(config.Fishing.session.history) do
                imgui.Text(string.format("%4d", caught));
                imgui.SameLine();
                imgui.TextColored({1.0, 1.0, 1.0, 0.25}, 'x');
@@ -128,7 +128,7 @@ local function FishingTracker()
                if (imgui.SmallButton(item_name)) then
                   config.editItem.id            = fishdata[item_name].fishid;
                   config.editItem.name          = item_name;
-                  config.editItem.oldValue      = config.fishing.customPrices[item_name] or
+                  config.editItem.oldValue      = config.Fishing.customPrices[item_name] or
                                                   fishdata[item_name].ah_price or
                                                   fishdata[item_name].sell_price;
                   config.editItem.newValue      = { config.editItem.oldValue };
@@ -137,7 +137,7 @@ local function FishingTracker()
                imgui.PopStyleColor(1);
                
                if (imgui.IsItemHovered()) then
-                  local price    = tostring(config.fishing.customPrices[item_name] or
+                  local price    = tostring(config.Fishing.customPrices[item_name] or
                                    fishdata[item_name].ah_price or
                                    fishdata[item_name].sell_price);
                   imgui.SetTooltip(caught .. ' x ' ..
@@ -152,7 +152,7 @@ local function FishingTracker()
       imgui.PushStyleColor(ImGuiCol_Button, {1, 0.3, 0.2, 0.5});
 		imgui.PushStyleColor(ImGuiCol_ButtonHovered, {1, 0.3, 0.2, 0.8});
 		if (imgui.Button(' Clear Session ')) then
-			config.fishing.session = {
+			config.Fishing.session = {
             casts          =  0;
             fish           =  0;
             item           =  0;
@@ -174,7 +174,7 @@ local function FishingTracker()
          };
 		end
 		imgui.SameLine();
-		if (imgui.Button(' Close Window ')) then config.fishing.show = not config.fishing.show; end
+		if (imgui.Button(' Close Window ')) then config.Fishing.show = not config.Fishing.show; end
 		imgui.PopStyleColor(2);
     end
 	imgui.End();
@@ -186,11 +186,11 @@ end
 -- desc: Sets times needed for tracking gil per hour.
 ----------------------------------------------------------------------------------------------------
 local function UpdateGph(t)
-   local total_time = t or config.fishing.session.gph.totalTime;
+   local total_time = t or config.Fishing.session.gph.totalTime;
    local k = 60;
    local c = total_time / (total_time + k);
-   local naive = 3600 * config.fishing.session.gph.sum / total_time;
-   config.fishing.session.gph.value = math.floor(naive * c);
+   local naive = 3600 * config.Fishing.session.gph.sum / total_time;
+   config.Fishing.session.gph.value = math.floor(naive * c);
    
    return false;
 end
@@ -224,21 +224,21 @@ local function EditItem()
             config.editItem.show = false;
          else
             -- Set Custom Price
-            config.fishing.customPrices[config.editItem.name] = config.editItem.newValue[1];
+            config.Fishing.customPrices[config.editItem.name] = config.editItem.newValue[1];
             echo(addon.name,'Value for ' .. config.editItem.name ..
                             ' set to ' .. tostring(config.editItem.newValue[1]));
                             
             -- Recalculate Gil Total
             local recalc = 0;
-            for item_name, caught in pairs(config.fishing.session.history) do
-               local item_value = config.fishing.customPrices[item_name] or
+            for item_name, caught in pairs(config.Fishing.session.history) do
+               local item_value = config.Fishing.customPrices[item_name] or
                                   fishdata[item_name].ah_price or
                                   fishdata[item_name].sell_price;
                recalc = recalc + (item_value * caught);
             end
             
             -- Update Gph
-            config.fishing.session.gph.sum = recalc;
+            config.Fishing.session.gph.sum = recalc;
             UpdateGph();
             
             config.editItem.show = false;
@@ -257,12 +257,12 @@ end
 local function UpdateActivityTime()
    local current_time = ashita.time.clock()['s'];
    
-   if (config.fishing.session.gph.lastAction ~= 0) then
-      local add_time = current_time - config.fishing.session.gph.lastAction;
-      config.fishing.session.gph.totalTime = config.fishing.session.gph.totalTime + add_time;
+   if (config.Fishing.session.gph.lastAction ~= 0) then
+      local add_time = current_time - config.Fishing.session.gph.lastAction;
+      config.Fishing.session.gph.totalTime = config.Fishing.session.gph.totalTime + add_time;
    end
    
-   config.fishing.session.gph.lastAction = current_time;
+   config.Fishing.session.gph.lastAction = current_time;
    
    return false;
 end
@@ -310,7 +310,7 @@ ashita.events.register('command', 'command_cb', function(e)
          echo(addon.name, '/hxifish skills           toggle tracking fishing or all skills');
       elseif (#args == 2) then
          if (args[2]:any('show')) then
-            config.fishing.show = true;
+            config.Fishing.show = true;
          elseif (args[2]:any('test')) then
             --sendFakeFishingSkillup();
          elseif (args[2]:any('skills')) then
@@ -321,12 +321,12 @@ ashita.events.register('command', 'command_cb', function(e)
       elseif (#args == 3) then
          if (args[2]:any('timeout')) then
             if (args[3]:match('^%d+$') and tonumber(args[3]) >= 1) then
-               config.fishing.session.gph.timeOut = tonumber(args[3] * 60);
+               config.Fishing.session.gph.timeOut = tonumber(args[3] * 60);
                settings.save();
                echo(addon.name, 'GPH inactivity timeout set to ' .. tostring(args[3]) .. ' minute(s).');
             else
                echo(addon.name, 'Usage: /hxifish timeout <number in minutes - minimum 1>');
-               echo(addon.name, 'Current: ' .. tostring(config.fishing.session.gph.timeOut / 60));
+               echo(addon.name, 'Current: ' .. tostring(config.Fishing.session.gph.timeOut / 60));
             end
          end
       else
@@ -384,23 +384,23 @@ ashita.events.register('text_in', 'text_in_cb', function(e)
 		-- Update Session, All-Time, & Catch History
 		if (hookNothing or lineBreak or rodBreak or stopFish or lostFish or monster or fishSuccess) then
 			if hookNothing then
-				config.fishing.session.noCatch   = config.fishing.session.noCatch + 1;
-				config.fishing.alltime.noCatch   = config.fishing.alltime.noCatch + 1;
+				config.Fishing.session.noCatch   = config.Fishing.session.noCatch + 1;
+				config.Fishing.alltime.noCatch   = config.Fishing.alltime.noCatch + 1;
 			elseif lineBreak then
-				config.fishing.session.lineBreak = config.fishing.session.lineBreak + 1;
-				config.fishing.alltime.lineBreak = config.fishing.alltime.lineBreak + 1;
+				config.Fishing.session.lineBreak = config.Fishing.session.lineBreak + 1;
+				config.Fishing.alltime.lineBreak = config.Fishing.alltime.lineBreak + 1;
 			elseif rodBreak then
-				config.fishing.session.rodBreak  = config.fishing.session.rodBreak + 1;
-				config.fishing.alltime.rodBreak  = config.fishing.alltime.rodBreak + 1;
+				config.Fishing.session.rodBreak  = config.Fishing.session.rodBreak + 1;
+				config.Fishing.alltime.rodBreak  = config.Fishing.alltime.rodBreak + 1;
 			elseif stopFish then
-				config.fishing.session.canceled  = config.fishing.session.canceled + 1;
-				config.fishing.alltime.canceled  = config.fishing.alltime.canceled + 1;
+				config.Fishing.session.canceled  = config.Fishing.session.canceled + 1;
+				config.Fishing.alltime.canceled  = config.Fishing.alltime.canceled + 1;
 			elseif lostFish then
-				config.fishing.session.lost      = config.fishing.session.lost + 1;
-				config.fishing.alltime.lost      = config.fishing.alltime.lost + 1;
+				config.Fishing.session.lost      = config.Fishing.session.lost + 1;
+				config.Fishing.alltime.lost      = config.Fishing.alltime.lost + 1;
 			elseif monster then
-				config.fishing.session.monster   = config.fishing.session.monster + 1;
-				config.fishing.alltime.monster   = config.fishing.alltime.monster + 1;
+				config.Fishing.session.monster   = config.Fishing.session.monster + 1;
+				config.Fishing.alltime.monster   = config.Fishing.alltime.monster + 1;
 			end
 			
 			config.Status = nil;
@@ -436,33 +436,33 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
             if (fishdata[item_name]) then
                -- Update Catch Stats
                if (item == 65535) then
-                  config.fishing.session.gil = config.fishing.session.gil + count;
-                  config.fishing.alltime.gil = config.fishing.alltime.gil + count;
+                  config.Fishing.session.gil = config.Fishing.session.gil + count;
+                  config.Fishing.alltime.gil = config.Fishing.alltime.gil + count;
                elseif (fishdata[item_name].item == 1) then
-                  config.fishing.session.item = config.fishing.session.item + count;
-                  config.fishing.alltime.item = config.fishing.alltime.item + count;
+                  config.Fishing.session.item = config.Fishing.session.item + count;
+                  config.Fishing.alltime.item = config.Fishing.alltime.item + count;
                elseif (fishdata[item_name].item == 0) then
-                  config.fishing.session.fish = config.fishing.session.fish + count;
-                  config.fishing.alltime.fish = config.fishing.alltime.fish + count;
+                  config.Fishing.session.fish = config.Fishing.session.fish + count;
+                  config.Fishing.alltime.fish = config.Fishing.alltime.fish + count;
                else
                   local errMsg = 'unhandled catch type';
                   echo(addon.name, errMsg);
                end
                
                -- Update Catch History
-               if (config.fishing.session.history[item_name] == nil) then
-                  config.fishing.session.history[item_name] = 0;
+               if (config.Fishing.session.history[item_name] == nil) then
+                  config.Fishing.session.history[item_name] = 0;
                end
-               config.fishing.session.history[item_name] = config.fishing.session.history[item_name] + count;
+               config.Fishing.session.history[item_name] = config.Fishing.session.history[item_name] + count;
                
-               if (config.fishing.alltime.history[item_name] == nil) then
-                  config.fishing.alltime.history[item_name] = 0;
+               if (config.Fishing.alltime.history[item_name] == nil) then
+                  config.Fishing.alltime.history[item_name] = 0;
                end
-               config.fishing.alltime.history[item_name] = config.fishing.alltime.history[item_name] + count;
+               config.Fishing.alltime.history[item_name] = config.Fishing.alltime.history[item_name] + count;
                
                -- Update Catch Value
                local catch_value = fishdata[item_name].ah_price or fishdata[item_name].sell_price;
-               config.fishing.session.gph.sum = config.fishing.session.gph.sum + catch_value;
+               config.Fishing.session.gph.sum = config.Fishing.session.gph.sum + catch_value;
                
                settings.save();
 				end
@@ -515,9 +515,9 @@ ashita.events.register('packet_out', 'packet_out_cb', function(e) -- id, size, d
 		-- 0x0A | Category | Cast Fishing Rod <= 14 (0x000E)
 		if (newpacket[0x0A+1] == 14) then
          config.Status = 'FISHING';
-         config.fishing.show = true;
-         config.fishing.session.casts = config.fishing.session.casts + 1;
-			config.fishing.alltime.casts = config.fishing.alltime.casts + 1;
+         config.Fishing.show = true;
+         config.Fishing.session.casts = config.Fishing.session.casts + 1;
+			config.Fishing.alltime.casts = config.Fishing.alltime.casts + 1;
          settings.save();
          UpdateActivityTime();
       end
@@ -530,8 +530,8 @@ ashita.events.register('packet_out', 'packet_out_cb', function(e) -- id, size, d
 		-- 0x0E | Action | End <= 4 - 0x04 - 0000 0100 - ''
 		if (newpacket[0x0E+1] == 0x04) then
 			config.Status = nil;
-			config.fishing.session.canceled = config.fishing.session.canceled + 1;
-			config.fishing.alltime.canceled = config.fishing.alltime.canceled + 1;
+			config.Fishing.session.canceled = config.Fishing.session.canceled + 1;
+			config.Fishing.alltime.canceled = config.Fishing.alltime.canceled + 1;
          settings.save();
          UpdateActivityTime();
 		end
@@ -558,7 +558,7 @@ ashita.events.register('d3d_present', 'present_cb', function ()
    
    -- Display Fishing Tracker
    local ok, err = pcall(function()
-      if (config.fishing.show) then
+      if (config.Fishing.show) then
          FishingTracker();
       end
    end)
@@ -580,15 +580,15 @@ ashita.events.register('d3d_present', 'present_cb', function ()
    
    -- Gil/Hour Updates 
    if ((ashita.time.clock()['s'] % 3) == 0) then
-      if (config.fishing.session.gph.lastAction > 0) then
-         local check_time = config.fishing.session.gph.lastAction + config.fishing.session.gph.timeOut;
-         local add_time = ashita.time.clock()['s'] - config.fishing.session.gph.lastAction;
+      if (config.Fishing.session.gph.lastAction > 0) then
+         local check_time = config.Fishing.session.gph.lastAction + config.Fishing.session.gph.timeOut;
+         local add_time = ashita.time.clock()['s'] - config.Fishing.session.gph.lastAction;
          if (check_time < ashita.time.clock()['s']) then
-            config.fishing.session.gph.totalTime = config.fishing.session.gph.totalTime + add_time;
-            config.fishing.session.gph.lastAction = 0;
+            config.Fishing.session.gph.totalTime = config.Fishing.session.gph.totalTime + add_time;
+            config.Fishing.session.gph.lastAction = 0;
          end
          
-         local total_time = config.fishing.session.gph.totalTime + add_time;
+         local total_time = config.Fishing.session.gph.totalTime + add_time;
          if (total_time > 0) then
             UpdateGph(total_time);
          end
