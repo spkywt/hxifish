@@ -94,11 +94,11 @@ end
 -- desc: Shows a tooltip with ImGui.
 ----------------------------------------------------------------------------------------------------
 function get_skill_level(sID)
-   if not (config.settings[SkillTypes[sID]]) then
-      config.settings[SkillTypes[sID]] = { skill = nil };
+   if not (config[SkillTypes[sID]]) then
+      config[SkillTypes[sID]] = { skill = nil };
    end
 
-   return config.settings[SkillTypes[sID]].skill;
+   return config[SkillTypes[sID]].skill;
 end
 
 function set_skill_level(sID, newVal)
@@ -107,15 +107,15 @@ function set_skill_level(sID, newVal)
    
    newVal = newVal or jobskill;
    newVal = tonumber(string.format("%.1f", newVal));
-   config.settings[SkillTypes[sID]].skill = newVal;
+   config[SkillTypes[sID]].skill = newVal;
    
    if (newVal < jobskill) then
-      config.settings[SkillTypes[sID]].skill = jobskill;
+      config[SkillTypes[sID]].skill = jobskill;
    elseif ((newVal - 1.4) > jobskill) then
-      config.settings[SkillTypes[sID]].skill = jobskill;
+      config[SkillTypes[sID]].skill = jobskill;
    end
    
-   echo(SkillTypes[sID] .. ' Skill', '' .. config.settings[SkillTypes[sID]].skill);
+   echo(SkillTypes[sID] .. ' Skill', '' .. config[SkillTypes[sID]].skill);
 end
 
 ----------------------------------------------------------------------------------------------------

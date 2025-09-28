@@ -26,7 +26,7 @@
 addon.author            = 'Espe (spkywt)';
 addon.name              = 'hxifish';
 addon.desc              = 'Tracker for fishing statistics.';
-addon.version           = '1.1.0';
+addon.version           = '1.2.0';
 
 -- Ashita Libs
 require 'common'
@@ -135,6 +135,15 @@ local function FishingTracker()
                   config.editItem.show          = true;
                end
                imgui.PopStyleColor(1);
+               
+               if (imgui.IsItemHovered()) then
+                  local price    = tostring(config.fishing.customPrices[item_name] or
+                                   fishdata[item_name].ah_price or
+                                   fishdata[item_name].sell_price);
+                  imgui.SetTooltip(caught .. ' x ' ..
+                                   price  .. 'g = ' ..
+                                   comma_value(caught * price) .. 'g');
+               end
             end
          end
 		imgui.EndChild();
