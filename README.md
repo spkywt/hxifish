@@ -16,4 +16,5 @@ Window automatically opens when casting your line. Exact skill level may take a 
   </tr>
 </table>
 <br />
-<img width="467" height="589" alt="image" src="https://github.com/user-attachments/assets/29a09d1e-9cc7-4e69-8648-08495cc4b926" /><br /><br />
+<img width="502" height="598" alt="image" src="https://github.com/user-attachments/assets/7ca195c0-13ce-4462-a054-e4e153e22bc4" />
+<br /><br />
