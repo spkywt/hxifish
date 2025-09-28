@@ -90,35 +90,6 @@ function format_time(sec)
 end
 
 ----------------------------------------------------------------------------------------------------
--- func: get_skill_level // set_skill_level
--- desc: Shows a tooltip with ImGui.
-----------------------------------------------------------------------------------------------------
-function get_skill_level(sID)
-   if not (config[SkillTypes[sID]]) then
-      config[SkillTypes[sID]] = { skill = nil };
-   end
-
-   return config[SkillTypes[sID]].skill;
-end
-
-function set_skill_level(sID, newVal)
-   local player = AshitaCore:GetMemoryManager():GetPlayer();
-   local jobskill = player:GetCraftSkill(sID - 48):GetSkill()
-   
-   newVal = newVal or jobskill;
-   newVal = tonumber(string.format("%.1f", newVal));
-   config[SkillTypes[sID]].skill = newVal;
-   
-   if (newVal < jobskill) then
-      config[SkillTypes[sID]].skill = jobskill;
-   elseif ((newVal - 1.4) > jobskill) then
-      config[SkillTypes[sID]].skill = jobskill;
-   end
-   
-   echo(SkillTypes[sID] .. ' Skill', '' .. config[SkillTypes[sID]].skill);
-end
-
-----------------------------------------------------------------------------------------------------
 -- Helper functions borrowed from luashitacast
 ----------------------------------------------------------------------------------------------------
 function GetTimestamp()

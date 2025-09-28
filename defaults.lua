@@ -3,7 +3,7 @@ local defaults =
 {
    Status               =	nil;
    Window_Flags         =  bit.bor(ImGuiWindowFlags_NoDecoration);
-   fishing					=  {
+   Fishing					=  {
       show              =  false;
       skill				   =  nil;
       alltime  		   =  {

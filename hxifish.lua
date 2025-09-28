@@ -405,6 +405,7 @@ ashita.events.register('text_in', 'text_in_cb', function(e)
 			
 			config.Status = nil;
          UpdateActivityTime();
+         settings.save();
 		end
       
 	end
@@ -496,7 +497,10 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
 	
 	-- Zone IN / Zone Out
 	if (id == 0x00A or id == 0x00B) then
-		if (config.Status ~= nil) then config.Status = nil; end
+		if (config.Status ~= nil) then
+         config.Status = nil;
+         settings.save();
+      end
 	end
 	
 	return false;
