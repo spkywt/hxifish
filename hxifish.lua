@@ -37,9 +37,9 @@ local settings          = require('settings');
 require 'constants'
 require 'helpers'
 --require 'packets'
+config                  = require('defaults');
 local moon              = require('.\\data\\moon');
 local fishdata          = require('.\\data\\fishdata');
-local config            = require('defaults');
 
 
 ----------------------------------------------------------------------------------------------------
