@@ -39,7 +39,7 @@ require 'helpers'
 require 'packets'
 local moon              = require('.\\data\\moon');
 local fishdata          = require('.\\data\\fishdata');
-local config            = require('defaults');
+config                  = require('defaults');
 
 
 ----------------------------------------------------------------------------------------------------
