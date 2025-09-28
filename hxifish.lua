@@ -617,8 +617,8 @@ ashita.events.register('d3d_present', 'present_cb', function ()
    end
    
    -- Gil/Hour Updates 
-   if ((ashita.time.clock()['s'] % 3) == 0) then
-      if (config.Fishing.session.gph.lastAction > 0) then
+   if (config.Fishing.session.gph.lastAction > 0) then
+      if ((ashita.time.clock()['s'] % 3) == 0) then
          local check_time = config.Fishing.session.gph.lastAction + config.Fishing.session.gph.timeOut;
          local add_time = ashita.time.clock()['s'] - config.Fishing.session.gph.lastAction;
          if (check_time < ashita.time.clock()['s']) then
