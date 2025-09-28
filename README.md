@@ -8,7 +8,7 @@ Window automatically opens when casting your line. Exact skill level may take a 
 </tr>
   <tr>
     <td>/hxifish timeout #</td>
-    <td>set timeout in minutes (pauses gph when inactive)</td>
+    <td>pauses gph when inactive - default 1 minute</td>
   </tr>
   <tr>
     <td>/hxifish skills</td>
