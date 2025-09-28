@@ -462,7 +462,9 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
                config.Fishing.alltime.history[item_name] = config.Fishing.alltime.history[item_name] + count;
                
                -- Update Catch Value
-               local catch_value = fishdata[item_name].ah_price or fishdata[item_name].sell_price;
+               local catch_value = config.Fishing.customPrices[item_name] or
+                                   fishdata[item_name].ah_price or
+                                   fishdata[item_name].sell_price;
                config.Fishing.session.gph.sum = config.Fishing.session.gph.sum + catch_value;
                
                settings.save();
