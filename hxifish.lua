@@ -26,7 +26,7 @@
 addon.author            = 'Espe (spkywt)';
 addon.name              = 'hxifish';
 addon.desc              = 'Tracker for fishing statistics.';
-addon.version           = '1.2.0';
+addon.version           = '1.2.1';
 
 -- Ashita Libs
 require 'common'
@@ -273,13 +273,17 @@ end
 -- desc: Event called when the addon is being loaded.
 ----------------------------------------------------------------------------------------------------
 ashita.events.register('load', 'load_cb', function()
-   local ok, err = pcall(function()
-      config = settings.load(config);
+   local ok, res = pcall(function()
+      return settings.load(config);
    end)
    
-   if not ok then
-      settings.save();
-      config = settings.load(config);
+   if ok and type(res) == 'table' then
+      config = res;
+   else
+      config = config:copy(true);
+      --pcall(function() settings.save('settings') end)
+      --settings.save();
+      --config = settings.load(config);
    end
 end);
 
@@ -524,8 +528,8 @@ ashita.events.register('packet_out', 'packet_out_cb', function(e) -- id, size, d
          config.Fishing.show = true;
          config.Fishing.session.casts = config.Fishing.session.casts + 1;
          config.Fishing.alltime.casts = config.Fishing.alltime.casts + 1;
-         settings.save();
          UpdateActivityTime();
+         settings.save();
       end
    end
    
@@ -538,14 +542,17 @@ ashita.events.register('packet_out', 'packet_out_cb', function(e) -- id, size, d
          config.Status = nil;
          config.Fishing.session.canceled = config.Fishing.session.canceled + 1;
          config.Fishing.alltime.canceled = config.Fishing.alltime.canceled + 1;
-         settings.save();
          UpdateActivityTime();
+         settings.save();
       end
    end
    
    -- Logout
    if (e.id == 0x0E7) then
-      if (config.Status ~= nil) then config.Status = nil; end
+      if (config.Status ~= nil) then
+         config.Status = nil;
+         settings.save();
+      end
    end
 
     return false;
