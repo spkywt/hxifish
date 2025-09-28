@@ -5,6 +5,6 @@ ZoneType = {[0] = 1,[26] = 1,[32] = 1,[48] = 1,[50] = 1,[70] = 1,[71] = 1,[80] =
 SkillTypes = {[48]="Fishing",[49]="Woodworking",[50]="Smithing",[51]="Goldsmithing",[52]="Clothcraft",[53]="Leathercraft",[54]="Bonecraft",[55]="Alchemy",[56]="Cooking",[57]="Synergy",[58]="Rid",[59]="Dig"};
 
 return {
-	ZoneType = ZoneType,
+   ZoneType = ZoneType,
    SkillTypes = SkillTypes
 }

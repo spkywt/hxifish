@@ -30,7 +30,7 @@ require 'common'
 -- desc: Prints out a message with the Itemwatch tag at the front.
 ----------------------------------------------------------------------------------------------------
 function echo(label, msg)
-	local txt = '\31\200[\31\05' .. label .. '\31\200] \31\130' .. msg;
+   local txt = '\31\200[\31\05' .. label .. '\31\200] \31\130' .. msg;
     print(txt);
 end
 
@@ -62,12 +62,12 @@ end
 -- add comma to separate thousands
 ----------------------------------------------------------------------------------------------------
 function comma_value(amount)
-	local formatted = amount;
-	while true do  
-		formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2');
-		if (k == 0) then break; end
-	end
-	return formatted;
+   local formatted = amount;
+   while true do  
+      formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2');
+      if (k == 0) then break; end
+   end
+   return formatted;
 end
 
 ----------------------------------------------------------------------------------------------------

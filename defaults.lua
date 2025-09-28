@@ -1,35 +1,35 @@
 local defaults =
 
 {
-   Status               =	nil;
+   Status               =   nil;
    Window_Flags         =  bit.bor(ImGuiWindowFlags_NoDecoration);
-   Fishing					=  {
+   Fishing               =  {
       show              =  false;
-      skill				   =  nil;
-      alltime  		   =  {
-         casts			   =  0;
-         fish			   =  0;
-         item			   =	0;
-         gil				=	0;
-         rodBreak		   =	0;
-         lineBreak		=	0;
-         canceled		   =	0;
+      skill               =  nil;
+      alltime           =  {
+         casts            =  0;
+         fish            =  0;
+         item            =   0;
+         gil            =   0;
+         rodBreak         =   0;
+         lineBreak      =   0;
+         canceled         =   0;
          lost           =  0;
-         noCatch			=	0;
-         monster			=	0;
-         history			= {};
+         noCatch         =   0;
+         monster         =   0;
+         history         = {};
       };
       session           =  {
-         casts			   =	0;
-         fish			   =	0;
-         item			   =	0;
-         gil				=	0;
-         rodBreak		   =	0;
-         lineBreak		=	0;
-         canceled		   =	0;
+         casts            =   0;
+         fish            =   0;
+         item            =   0;
+         gil            =   0;
+         rodBreak         =   0;
+         lineBreak      =   0;
+         canceled         =   0;
          lost           =  0;
-         noCatch			=	0;
-         monster			=	0;
+         noCatch         =   0;
+         monster         =   0;
          gph            =  {
             value       =  0;
             sum         =  0;
@@ -37,7 +37,7 @@ local defaults =
             totalTime   =  0;
             lastAction  =  0;
          };
-         history			=  {};
+         history         =  {};
       };
       customPrices      =  {};
    };
