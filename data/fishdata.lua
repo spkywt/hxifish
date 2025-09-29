@@ -29,10 +29,10 @@ fishdata["Muddy Siredon"] = T{ fishid = 5126, skill_level = 18, water_type = "Fr
 fishdata["Quus"] = T{ fishid = 4514, skill_level = 19, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 12, sell_price = 20, item = 0 }
 fishdata["Damp Scroll"] = T{ fishid = 1210, skill_level = 20, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 1, sell_price = 1, item = 1 }
 fishdata["Tiny Goldfish"] = T{ fishid = 4310, skill_level = 20, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 12, sell_price = 1, item = 0 }
-fishdata["Ripped cap"] = T{ fishid = 591, skill_level = 20, water_type = "Fresh", catch_size = "Small", minimum_rod = "Carbon Fishing Rod", stackSize = 1, sell_price = 0, item = 1 }
+fishdata["Ripped Cap"] = T{ fishid = 591, skill_level = 20, water_type = "Fresh", catch_size = "Small", minimum_rod = "Carbon Fishing Rod", stackSize = 1, sell_price = 0, item = 1 }
 fishdata["Forest Carp"] = T{ fishid = 4289, skill_level = 20, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 22, item = 0 }
 fishdata["Cheval Salmon"] = T{ fishid = 4379, skill_level = 21, water_type = "Fresh", catch_size = "Small", minimum_rod = "Halcyon Rod", stackSize = 12, sell_price = 20, item = 0 }
-fishdata["Copper ring"] = T{ fishid = 13454, skill_level = 24, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 1, sell_price = 19, item = 1 }
+fishdata["Copper Ring"] = T{ fishid = 13454, skill_level = 24, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 1, sell_price = 19, item = 1 }
 fishdata["Fat Greedie"] = T{ fishid = 4501, skill_level = 24, water_type = "Salt", catch_size = "Small", minimum_rod = "Glass Fiber Fishing Rod", stackSize = 1, sell_price = 0, item = 0 }
 fishdata["Gurnard"] = T{ fishid = 5132, skill_level = 26, water_type = "Fresh", catch_size = "Small", minimum_rod = "Willow Fishing Rod", stackSize = 12, sell_price = 475, item = 0 }
 fishdata["Moorish Idol"] = T{ fishid = 5121, skill_level = 26, water_type = "Salt", catch_size = "Small", minimum_rod = "Tarutaru Fishing Rod", stackSize = 12, sell_price = 242, item = 0 }
