@@ -26,7 +26,7 @@
 addon.author            = 'Espe (spkywt)';
 addon.name              = 'hxifish';
 addon.desc              = 'Tracker for fishing statistics.';
-addon.version           = '1.2.1';
+addon.version           = '1.3.0';
 
 -- Ashita Libs
 require 'common'
@@ -36,11 +36,35 @@ local settings          = require('settings');
 -- Addon Custom Files
 require 'constants'
 require 'helpers'
---require 'packets'
 local moon              = require('.\\data\\moon');
 local fishdata          = require('.\\data\\fishdata');
 local defaults          = require('defaults');
 local config;
+
+
+----------------------------------------------------------------------------------------------------
+-- func: UpdateGph
+-- desc: Sets times needed for tracking gil per hour.
+----------------------------------------------------------------------------------------------------
+local function UpdateGph(t)
+   local total_time = t or config.Fishing.session.gph.totalTime;
+   local k = 60;
+   local c = total_time / (total_time + k);
+   local naive = 3600 * config.Fishing.session.gph.sum / total_time;
+   config.Fishing.session.gph.value = math.floor(naive * c);
+   
+   return false;
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- func: GetItemPrice
+-- desc: Returns base price or custom price, if set.
+----------------------------------------------------------------------------------------------------
+local function GetItemPrice(item_name)
+   return config.Fishing.customPrices[item_name]
+       or fishdata[item_name].sell_price;
+end
 
 
 ----------------------------------------------------------------------------------------------------
@@ -50,7 +74,7 @@ local config;
 local function FishingTracker()
    -- Initialize the window draw.
    imgui.SetNextWindowBgAlpha(0.8);
-   imgui.SetNextWindowSize({242, 0}, ImGuiSetCond_Always);
+   imgui.SetNextWindowSize({236, 0}, ImGuiSetCond_Always);
    if (imgui.Begin('Fishing Tracker', true, config.Window_Flags)) then
       -- Current Zone
       local currentZoneID = AshitaCore:GetMemoryManager():GetParty():GetMemberZone(0)
@@ -80,13 +104,17 @@ local function FishingTracker()
       elseif (FishingSkillMax - FishingSkill <= 2) and (FishingSkill < 98) then 
          imgui.PushStyleColor(ImGuiCol_Text, {0, 1, 0, 1});
          DisplaySkill = DisplaySkill .. ' RANK QUEST';
-      else imgui.PushStyleColor(ImGuiCol_Text, {1, 1, 1, 1});
+      else
+         imgui.PushStyleColor(ImGuiCol_Text, {1, 1, 1, 1});
       end
       imgui.Text(DisplaySkill);
       imgui.PopStyleColor(1);
+      if (config.Fishing.session.skill > 0) then
+         imgui.Text('Skill+  ' .. tostring(config.Fishing.session.skill));
+      end
       imgui.Separator();
       
-      -- Stats
+      -- Catch Stats
       imgui.TextColored({1.0, 1.0, 0.4, 1.0},'Category     Session  All-Time');
       imgui.Separator();
       local var_stats = config.Fishing.session;
@@ -102,9 +130,17 @@ local function FishingTracker()
       imgui.Text('Rod Break:   ' .. string.format("%-9s",var_stats.rodBreak) .. cfg_stats.rodBreak);
       imgui.Text('Line Break:  ' .. string.format("%-9s",var_stats.lineBreak) .. cfg_stats.lineBreak);
       imgui.Separator();
+      
+      -- Gil/Hour Stats
       local displaytime = config.Fishing.session.gph.totalTime + ((config.Fishing.session.gph.lastAction ~= 0) and (ashita.time.clock()['s'] - config.Fishing.session.gph.lastAction) or 0);
       imgui.Text('Time:        ' .. format_time(displaytime));
       imgui.Text('Gil:         ' .. comma_value(config.Fishing.session.gph.sum));
+      if (config.Fishing.session.lastCatch > 0) then
+         local rmItem = AshitaCore:GetResourceManager():GetItemById(config.Fishing.session.lastCatch);
+         local item_name = (rmItem.Name and rmItem.Name[1]) or (rmItem.Name and rmItem.Name[0]) or nil;
+         imgui.SameLine();
+         imgui.TextColored({0.5, 1.0, 0.5, 1.0},'+ ' .. GetItemPrice(item_name));
+      end
       imgui.Text('gph:         ' .. comma_value(config.Fishing.session.gph.value));
       if (config.Fishing.session.gph.lastAction == 0 and config.Fishing.session.gph.totalTime > 0) then
          local pausemsg = 'Paused due to inactivity > ' .. tostring(config.Fishing.session.gph.timeOut / 60) .. 'm'
@@ -112,140 +148,175 @@ local function FishingTracker()
       end
       imgui.Separator();
       
-      -- Catch History
-      imgui.BeginChild('Catch History', {0, 169}, true);
-         imgui.TextColored({1.0, 1.0, 0.4, 1.0}, 'Catch History');
+      if config.editItem.show then
+         -- Edit Item Panel (overrides catch history)
+         imgui.BeginChild('Edit Item', {0, 166}, true);
+            imgui.Text('Id:        ' .. config.editItem.id);
+            imgui.Text('Name:      ' .. config.editItem.name);
+            imgui.Text('Level:     ' .. fishdata[config.editItem.name].skill_level);
+            if (fishdata[config.editItem.name].min_length ~= nil
+                and fishdata[config.editItem.name].item == 0) then
+               imgui.Separator();
+               imgui.Text('Length:    ' .. fishdata[config.editItem.name].min_length ..
+                          ' to '        .. fishdata[config.editItem.name].max_length);
+               imgui.Text('Weight:    ' .. fishdata[config.editItem.name].min_weight ..
+                          ' to '        .. fishdata[config.editItem.name].max_weight);
+               imgui.Dummy({0, 10});
+            else
+               imgui.Dummy({0, 50});
+            end
+            imgui.Text('Gil Value:');
+            imgui.InputInt('##fishval', config.editItem.newValue, 25, 100);
+         imgui.EndChild();
+         
+         -- Buttons
+         imgui.PushStyleColor(ImGuiCol_Button, {1, 0.3, 0.2, 0.5});
+         imgui.PushStyleColor(ImGuiCol_ButtonHovered, {1, 0.3, 0.2, 0.8});
+         if (imgui.Button(' Cancel ')) then 
+            config.editItem.show = false;
+         end
          imgui.SameLine();
-         show_help(imgui, 'Clear affects catch history\nClick item to change settings');
-         imgui.Separator();
-         if (config.Fishing.session.history) then
-            for item_name, caught in pairs(config.Fishing.session.history) do
-               imgui.Text(string.format("%4d", caught));
-               imgui.SameLine();
-               imgui.TextColored({1.0, 1.0, 1.0, 0.25}, 'x');
-               imgui.SameLine();
-               --imgui.Text(item_name);
-               imgui.PushStyleColor(ImGuiCol_Button, {1, 1, 1, 0});
-               if (imgui.SmallButton(item_name)) then
-                  config.editItem.id            = fishdata[item_name].fishid;
-                  config.editItem.name          = item_name;
-                  config.editItem.oldValue      = config.Fishing.customPrices[item_name] or
-                                                  fishdata[item_name].ah_price or
-                                                  fishdata[item_name].sell_price;
-                  config.editItem.newValue      = { config.editItem.oldValue };
-                  config.editItem.show          = true;
+         if (imgui.Button(' Save ')) then
+            if (config.editItem.newValue[1] == config.editItem.oldValue) then
+               config.editItem.show = false;
+            else
+               -- Set Custom Price
+               config.Fishing.customPrices[config.editItem.name] = config.editItem.newValue[1];
+               echo(addon.name,'Value for ' .. config.editItem.name ..
+                               ' set to ' .. tostring(config.editItem.newValue[1]));
+                               
+               -- Recalculate Gil Total
+               local recalc = 0;
+               for item_name, caught in pairs(config.Fishing.session.history) do
+                  recalc = recalc + (GetItemPrice(item_name) * caught);
                end
-               imgui.PopStyleColor(1);
                
-               if (imgui.IsItemHovered()) then
-                  local price    = tostring(config.Fishing.customPrices[item_name] or
-                                   fishdata[item_name].ah_price or
-                                   fishdata[item_name].sell_price);
-                  imgui.SetTooltip(caught .. ' x ' ..
-                                   price  .. 'g = ' ..
-                                   comma_value(caught * price) .. 'g');
+               -- Update Gph
+               config.Fishing.session.gph.sum = recalc;
+               UpdateGph();
+               
+               config.editItem.show = false;
+            end
+         end
+         imgui.PopStyleColor(2);
+      elseif (config.options.show == true) then
+         -- Options Panel (overrides catch history)
+         imgui.BeginChild('Options', {0, 166}, true);
+            -- Option >> Skill Tracking
+            local choices = config.options.choices;
+            imgui.Text('Track Skills:');
+            if (imgui.Combo('##tracking', config.options.tracking, choices, #choices)) then
+               settings.save();
+            end
+            
+            -- Option >> GPH Timeout
+            imgui.NewLine();
+            imgui.Text('Timeout in Minutes:');
+            imgui.SameLine();
+            imgui.TextDisabled('(?)');
+            tool_tip(imgui, 'Pauses gil/hour calculations after inactivity');
+            if (imgui.SliderInt('##mins', config.options.timeoutInput, 1, 60)) then
+               config.options.timeout = config.options.timeoutInput[1] * 60;
+               settings.save();
+            end
+            
+            -- Option >> Clear Session
+            imgui.NewLine();
+            if (config.options.clrSession[1]) then
+               imgui.PushStyleColor(ImGuiCol_Button, {1, 0.3, 0.2, 0.5});
+               imgui.PushStyleColor(ImGuiCol_ButtonHovered, {1, 0.3, 0.2, 0.8});
+            else
+               imgui.PushStyleColor(ImGuiCol_Button, {0.5, 0.5, 0.5, 0.5});
+               imgui.PushStyleColor(ImGuiCol_ButtonHovered, {0.5, 0.5, 0.5, 0.5});
+               imgui.PushStyleColor(ImGuiCol_ButtonActive, {0.5, 0.5, 0.5, 0.5});
+            end
+            imgui.Checkbox('##confirmclear', config.options.clrSession);
+            imgui.SameLine();
+            local clicked = imgui.Button(' Clear Session ');
+            if (clicked and config.options.clrSession[1]) then
+               config.Fishing.session = {
+                  casts          =  0;
+                  fish           =  0;
+                  item           =  0;
+                  gil            =  0;
+                  rodBreak       =  0;
+                  lineBreak      =  0;
+                  canceled       =  0;
+                  lost           =  0;
+                  noCatch        =  0;
+                  monster        =  0;
+                  gph            =  {
+                     value       =  0;
+                     sum         =  0;
+                     timeOut     =  60;
+                     totalTime   =  0;
+                     lastAction  =  0;
+                  };
+                  history        =  {};
+                  skill          =  0;
+                  lastCatch      =  0;
+               };
+               config.options.clrSession = { false };
+            end
+            imgui.PopStyleColor(2);
+         imgui.EndChild();
+         
+         -- Buttons
+         imgui.PushStyleColor(ImGuiCol_Button, {1, 0.3, 0.2, 0.5});
+         imgui.PushStyleColor(ImGuiCol_ButtonHovered, {1, 0.3, 0.2, 0.8});
+         if (imgui.Button(' Cancel ')) then 
+            config.options.show = false;
+         end
+         imgui.SameLine();
+         if (imgui.Button(' Save ')) then
+            --
+         end
+         imgui.PopStyleColor(2);
+      else
+         -- Catch History
+         imgui.BeginChild('Catch History', {0, 166}, true);
+            imgui.TextColored({1.0, 1.0, 0.4, 1.0}, 'Catch History');
+            imgui.SameLine();
+            imgui.TextDisabled('(?)');
+            tool_tip(imgui, 'Clear affects catch history\nClick item to change settings');
+            imgui.Separator();
+            if (config.Fishing.session.history) then
+               for item_name, caught in pairs(config.Fishing.session.history) do
+                  imgui.Text(string.format("%4d", caught));
+                  imgui.SameLine();
+                  imgui.TextColored({1.0, 1.0, 1.0, 0.25}, 'x');
+                  imgui.SameLine();
+                  if (fishdata[item_name].fishid == config.Fishing.session.lastCatch) then
+                     imgui.PushStyleColor(ImGuiCol_Text, {0.5, 1.0, 0.5, 1.0});
+                  else
+                     imgui.PushStyleColor(ImGuiCol_Text, {1.0, 1.0, 1, 1.0});
+                  end
+                  imgui.PushStyleColor(ImGuiCol_Button, {1, 1, 1, 0});
+                  if (imgui.SmallButton(item_name)) then
+                     config.editItem.id            = fishdata[item_name].fishid;
+                     config.editItem.name          = item_name;
+                     config.editItem.oldValue      = GetItemPrice(item_name);
+                     config.editItem.newValue      = { config.editItem.oldValue };
+                     config.editItem.show          = true;
+                  end
+                  imgui.PopStyleColor(2);
+                  
+                  local price = tostring(GetItemPrice(item_name));
+                  local msg   = caught .. ' x ' .. price .. 'g = ' ..
+                                comma_value(caught * price) .. 'g';
+                  tool_tip(imgui, msg);
                end
             end
-         end
-      imgui.EndChild();
+         imgui.EndChild();
       
-      -- Button Bar
-      imgui.PushStyleColor(ImGuiCol_Button, {1, 0.3, 0.2, 0.5});
-      imgui.PushStyleColor(ImGuiCol_ButtonHovered, {1, 0.3, 0.2, 0.8});
-      if (imgui.Button(' Clear Session ')) then
-         config.Fishing.session = {
-            casts          =  0;
-            fish           =  0;
-            item           =  0;
-            gil            =  0;
-            rodBreak       =  0;
-            lineBreak      =  0;
-            canceled       =  0;
-            lost           =  0;
-            noCatch        =  0;
-            monster        =  0;
-            gph            =  {
-               value       =  0;
-               sum         =  0;
-               timeOut     =  60;
-               totalTime   =  0;
-               lastAction  =  0;
-            };
-            history        =  {};
-         };
+         -- Buttons
+         imgui.PushStyleColor(ImGuiCol_Button, {1, 0.3, 0.2, 0.5});
+         imgui.PushStyleColor(ImGuiCol_ButtonHovered, {1, 0.3, 0.2, 0.8});
+         if (imgui.Button(' Show Options ')) then config.options.show = true; end
+         imgui.SameLine();
+         if (imgui.Button(' Close Window ')) then config.Fishing.show = false; end
+         imgui.PopStyleColor(2);
       end
-      imgui.SameLine();
-      if (imgui.Button(' Close Window ')) then config.Fishing.show = not config.Fishing.show; end
-      imgui.PopStyleColor(2);
-    end
-   imgui.End();
-end
-
-
-----------------------------------------------------------------------------------------------------
--- func: UpdateGph
--- desc: Sets times needed for tracking gil per hour.
-----------------------------------------------------------------------------------------------------
-local function UpdateGph(t)
-   local total_time = t or config.Fishing.session.gph.totalTime;
-   local k = 60;
-   local c = total_time / (total_time + k);
-   local naive = 3600 * config.Fishing.session.gph.sum / total_time;
-   config.Fishing.session.gph.value = math.floor(naive * c);
-   
-   return false;
-end
-
-
-----------------------------------------------------------------------------------------------------
--- func: EditFish
--- desc: Shows fishing tracker window.
-----------------------------------------------------------------------------------------------------
-local function EditItem()
-   -- Initialize the window draw.
-   imgui.SetNextWindowBgAlpha(0.8);
-   imgui.SetNextWindowSize({0, 0}, ImGuiSetCond_Always);
-   if (imgui.Begin('Edit Fish', true, config.Window_Flags)) then
-      -- Window Text
-      imgui.Text('Id:      ' .. config.editItem.id);
-      imgui.Text('Name:    ' .. config.editItem.name);
-      imgui.Text('Value:   ' .. config.editItem.oldValue);
-      imgui.Separator();
-      imgui.InputInt('##fishval', config.editItem.newValue, 25, 100);
-      
-      -- Buttons
-      imgui.PushStyleColor(ImGuiCol_Button, {1, 0.3, 0.2, 0.5});
-      imgui.PushStyleColor(ImGuiCol_ButtonHovered, {1, 0.3, 0.2, 0.8});
-      if (imgui.Button(' Cancel ')) then 
-         config.editItem.show = false;
-      end
-      imgui.SameLine();
-      if (imgui.Button(' Save ')) then
-         if (config.editItem.newValue[1] == config.editItem.oldValue) then
-            config.editItem.show = false;
-         else
-            -- Set Custom Price
-            config.Fishing.customPrices[config.editItem.name] = config.editItem.newValue[1];
-            echo(addon.name,'Value for ' .. config.editItem.name ..
-                            ' set to ' .. tostring(config.editItem.newValue[1]));
-                            
-            -- Recalculate Gil Total
-            local recalc = 0;
-            for item_name, caught in pairs(config.Fishing.session.history) do
-               local item_value = config.Fishing.customPrices[item_name] or
-                                  fishdata[item_name].ah_price or
-                                  fishdata[item_name].sell_price;
-               recalc = recalc + (item_value * caught);
-            end
-            
-            -- Update Gph
-            config.Fishing.session.gph.sum = recalc;
-            UpdateGph();
-            
-            config.editItem.show = false;
-         end
-      end
-      imgui.PopStyleColor(2);
     end
    imgui.End();
 end
@@ -303,34 +374,7 @@ ashita.events.register('command', 'command_cb', function(e)
    end
    
    if (args[1]:any('/hxifish')) then
-      if (#args == 1) then
-         echo(addon.name, '/hxifish show           show tracking window');
-         echo(addon.name, '/hxifish timeout #      set timeout in minutes for gph calc');
-         echo(addon.name, '/hxifish skills           toggle tracking fishing or all skills');
-      elseif (#args == 2) then
-         if (args[2]:any('show')) then
-            config.Fishing.show = true;
-         elseif (args[2]:any('test')) then
-            --sendFakeFishingSkillup();
-         elseif (args[2]:any('skills')) then
-            config.trackAllSkills = not config.trackAllSkills;
-            settings.save();
-            echo(addon.name, 'Tracking all skills: ' .. tostring(config.trackAllSkills));
-         end
-      elseif (#args == 3) then
-         if (args[2]:any('timeout')) then
-            if (args[3]:match('^%d+$') and tonumber(args[3]) >= 1) then
-               config.Fishing.session.gph.timeOut = tonumber(args[3] * 60);
-               settings.save();
-               echo(addon.name, 'GPH inactivity timeout set to ' .. tostring(args[3]) .. ' minute(s).');
-            else
-               echo(addon.name, 'Usage: /hxifish timeout <number in minutes - minimum 1>');
-               echo(addon.name, 'Current: ' .. tostring(config.Fishing.session.gph.timeOut / 60));
-            end
-         end
-      else
-         echo(addon.name, 'Unrecognized command.');
-      end
+      config.Fishing.show = true;
    end
 
    return false;
@@ -342,22 +386,22 @@ end);
 -- desc: Event called when the addon is asked to handle an incoming chat line.
 ---------------------------------------------------------------------------------------------------
 ashita.events.register('text_in', 'text_in_cb', function(e)
-    local mode = e.mode;
-    local message = e.message;
-    local modifiedmode = e.modifiedmode;
-    local blocked = e.blocked;
+   local mode = e.mode;
+   local message = e.message;
+   local modifiedmode = e.modifiedmode;
+   local blocked = e.blocked;
     
-    -- Do nothing if the line is already blocked..
-    if (blocked) then return false; end
+   -- Do nothing if the line is already blocked..
+   if (blocked) then return false; end
 
-    -- Handle the modified message if its set..
-    if (modifiedmessage ~= nil and #modifiedmessage > 0) then message = modifiedmessage; end
+   -- Handle the modified message if its set..
+   if (modifiedmessage ~= nil and #modifiedmessage > 0) then message = modifiedmessage; end
         
-    -- Check for double-chat lines (ie. npc chat)..
-    if (message:startswith(string.char(0x1E, 0x01))) then return false; end
+   -- Check for double-chat lines (ie. npc chat)..
+   if (message:startswith(string.char(0x1E, 0x01))) then return false; end
    
-    -- Remove colors form message
-    local originalmsg = message;
+   -- Remove colors form message
+   local originalmsg = message;
    message = string.strip_colors(message);
    
    --echo('debug', AshitaCore:GetResourceManager():GetString('areas', party:GetMemberZone(0)));
@@ -372,10 +416,11 @@ ashita.events.register('text_in', 'text_in_cb', function(e)
       local lineBreak   = string.match(message, "Your line breaks.");
       local rodBreak    = string.match(message, "Your rod breaks.");
       local stopFish    = string.match(message, "You give up.") or
-                     string.match(message, "You give up and reel in your line.");
-      local lostFish     =   string.match(message, "You lost your catch.") or 
-                     string.match(message, "You lost your catch due to your lack of skill.");
-      local monster     = string.match(message, playerName .. " caught a monster!");
+                          string.match(message, "You give up and reel in your line.");
+      local lostFish    = string.match(message, "You lost your catch.") or 
+                          string.match(message, "You lost your catch due to your lack of skill.");
+      local monster     = string.match(message, playerName .. " caught a monster!") or
+                          string.match(message, "Something clamps onto your line ferociously!");
       --string.match(message, "You cannot carry any more items.");
       --string.match(message, "Something caught the hook!")
       --string.match(message, "You feel something pulling at your line.")
@@ -475,8 +520,7 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
                   config.Fishing.session.fish = config.Fishing.session.fish + count;
                   config.Fishing.alltime.fish = config.Fishing.alltime.fish + count;
                else
-                  local errMsg = 'unhandled catch type';
-                  echo(addon.name, errMsg);
+                  echo(addon.name, 'unhandled catch type');
                end
                
                -- Update Catch History
@@ -491,12 +535,14 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
                config.Fishing.alltime.history[item_name] = config.Fishing.alltime.history[item_name] + count;
                
                -- Update Catch Value
-               local catch_value = config.Fishing.customPrices[item_name] or
-                                   fishdata[item_name].ah_price or
-                                   fishdata[item_name].sell_price;
-               config.Fishing.session.gph.sum = config.Fishing.session.gph.sum + catch_value;
+               config.Fishing.session.gph.sum = config.Fishing.session.gph.sum
+                                              + GetItemPrice(item_name);
+               
+               config.Fishing.session.lastCatch = item;
                
                settings.save();
+            else
+               echo(addon.name, 'unknown item name: ' .. item_name);
             end
          end
       end
@@ -508,11 +554,15 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
       local param1   = struct.unpack('H', packet, 0x0C + 1);
       local param2   = struct.unpack('H', packet, 0x10 + 1);
       
-      -- Restrict to Fishing Skillups for now
-      if ((config.trackAllSkills and param1 >= 48) or param1 == 48) then
+      -- Update Tracked Skill Level
+      local limits = {[0] = 48, [1] = 59, [2] = 0};
+      if (param1 >= 48 and param1 <= limits[config.options.tracking[1]]) then
          if (message == 38) then
             if (get_skill_level(param1) == nil) then set_skill_level(param1); end
             set_skill_level(param1, get_skill_level(param1) + tonumber(param2 / 10));
+            if (param1 == 48) then
+               config.Fishing.session.skill = config.Fishing.session.skill + tonumber(param2 / 10);
+            end
             settings.save();
          end
          
@@ -598,17 +648,6 @@ ashita.events.register('d3d_present', 'present_cb', function ()
    local ok, err = pcall(function()
       if (config.Fishing.show) then
          FishingTracker();
-      end
-   end)
-   if not ok then
-      echo(addon.name, 'Error during render: ' .. tostring(err));
-      AshitaCore:GetChatManager():QueueCommand(-1, string.format('/addon unload %s', addon.name));
-   end
-   
-   -- Display Item Edit Window
-   local ok, err = pcall(function()
-      if (config.editItem.show) then
-         EditItem();
       end
    end)
    if not ok then

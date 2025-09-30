@@ -6,7 +6,7 @@ require 'common'
 ----------------------------------------------------------------------------------------------------
 function echo(label, msg)
    local txt = '\31\200[\31\05' .. label .. '\31\200] \31\130' .. msg;
-    print(txt);
+   print(txt);
 end
 
 ----------------------------------------------------------------------------------------------------
@@ -14,21 +14,19 @@ end
 -- desc: Waits for 1, or specified amount, of seconds.
 ----------------------------------------------------------------------------------------------------
 local function wait(seconds)
-    local time = seconds or 1;
-    local start = os.time();
-    repeat until os.time() == start + time;
+   local time = seconds or 1;
+   local start = os.time();
+   repeat until os.time() == start + time;
 end
 
 ----------------------------------------------------------------------------------------------------
--- func: show_help
+-- func: tool_tip
 -- desc: Shows a tooltip with ImGui.
 ----------------------------------------------------------------------------------------------------
-function show_help(imgui, desc)
-    imgui.TextDisabled('(?)');
-    if (imgui.IsItemHovered()) then
-        imgui.SetTooltip(desc);
-    end
+function tool_tip(imgui, desc)
+   if (imgui.IsItemHovered()) then imgui.SetTooltip(desc); end
 end
+
 
 ----------------------------------------------------------------------------------------------------
 -- from sam_lie
@@ -50,18 +48,18 @@ end
 -- desc: show time as #h #m #s.
 ----------------------------------------------------------------------------------------------------
 function format_time(sec)
-    sec = math.floor(sec or 0)
+   sec = math.floor(sec or 0)
 
-    local h = math.floor(sec / 3600)
-    local m = math.floor((sec % 3600) / 60)
-    local s = sec % 60
+   local h = math.floor(sec / 3600)
+   local m = math.floor((sec % 3600) / 60)
+   local s = sec % 60
 
-    local parts = {}
-    if h > 0 then table.insert(parts, string.format("%dh", h)) end
-    if m > 0 or h > 0 then table.insert(parts, string.format("%dm", m)) end
-    table.insert(parts, string.format("%ds", s))
+   local parts = {}
+   if h > 0 then table.insert(parts, string.format("%dh", h)) end
+   if m > 0 or h > 0 then table.insert(parts, string.format("%dm", m)) end
+   table.insert(parts, string.format("%ds", s))
 
-    return table.concat(parts, " ")
+   return table.concat(parts, " ")
 end
 
 ----------------------------------------------------------------------------------------------------
