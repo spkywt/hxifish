@@ -1,6 +1,6 @@
 # hxifish
 FFXI Tracker for fishing statistics. <br /><br />
-Window automatically opens when casting your line. Exact skill level may take a level or two to dial in correctly.  <br /><br />
+Window automatically opens when casting your line.<br /><br />
 <table>
   <tr>
     <td>/hxifish</td>
