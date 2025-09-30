@@ -8,5 +8,7 @@ Window automatically opens when casting your line.<br /><br />
 </tr>
 </table>
 <br />
-<img width="502" height="598" alt="image" src="https://github.com/user-attachments/assets/7ca195c0-13ce-4462-a054-e4e153e22bc4" />
+<img width="254" height="562" alt="image" src="https://github.com/user-attachments/assets/513f756e-cf1c-4ced-84a8-3ccc7a630415" />
+<img width="251" height="558" alt="image" src="https://github.com/user-attachments/assets/36aa2f7a-5985-48a8-ab7e-62fa810db257" />
+<img width="251" height="558" alt="image" src="https://github.com/user-attachments/assets/09b6f34d-9f6d-407e-9e42-8cd13589f866" />
 <br /><br />
