@@ -26,7 +26,7 @@
 addon.author            = 'Espe (spkywt)';
 addon.name              = 'hxifish';
 addon.desc              = 'Tracker for fishing statistics.';
-addon.version           = '1.3.0';
+addon.version           = '1.4.0';
 
 -- Ashita Libs
 require 'common'
@@ -389,32 +389,27 @@ end);
 -- func: incoming_text
 -- desc: Event called when the addon is asked to handle an incoming chat line.
 ---------------------------------------------------------------------------------------------------
-ashita.events.register('text_in', 'text_in_cb', function(e)
-   local mode = e.mode;
+ashita.events.register('text_in', 'text_in_cb', function(e) -- Unused: e.mode , e.modifiedmode
+   -- Ignore injected messages
+   if (e.injected) then return false; end
+   -- Ingore messages already blocked by another process
+   if (e.blocked) then return false; end
+   -- Ignore double-chat lines (ie. npc chat)..
+   if (e.message:startswith(string.char(0x1E, 0x01))) then return false; end
+   
    local message = e.message;
-   local modifiedmode = e.modifiedmode;
-   local blocked = e.blocked;
-    
-   -- Do nothing if the line is already blocked..
-   if (blocked) then return false; end
-
+   
    -- Handle the modified message if its set..
    if (modifiedmessage ~= nil and #modifiedmessage > 0) then message = modifiedmessage; end
         
-   -- Check for double-chat lines (ie. npc chat)..
-   if (message:startswith(string.char(0x1E, 0x01))) then return false; end
-   
    -- Remove colors form message
-   local originalmsg = message;
    message = string.strip_colors(message);
-   
-   --echo('debug', AshitaCore:GetResourceManager():GetString('areas', party:GetMemberZone(0)));
 
-   -- Start Fishing --
-   local party = AshitaCore:GetMemoryManager():GetParty();
-   local playerName = party:GetMemberName(0);
-   
+   -- Check for fishing messages after casting fishing rod
    if (config.Status == 'FISHING') then
+      local party = AshitaCore:GetMemoryManager():GetParty();
+      local playerName = party:GetMemberName(0);
+      
       local hookNothing = string.match(message, "You didn't catch anything.");
       local fishSuccess = string.match(message, playerName .. " caught (.*)!");
       local lineBreak   = string.match(message, "Your line breaks.");
@@ -456,9 +451,79 @@ ashita.events.register('text_in', 'text_in_cb', function(e)
          settings.save();
       end
       
+      --Update chat log message with skill up chance (fish only)
+      if (fishSuccess and not monster) then
+         -- Get item name
+         local function esc(s) return (s:gsub("(%W)","%%%1")); end
+         local item = message:match('^%s*' .. esc(playerName) .. '%s+caught%s+([^!]+)!?%s*$')
+                      :gsub('^%s*an?%s+',''):gsub('%s+$','');
+         local item = item:lower():gsub("%f[%a]%l", string.upper);
+         
+         -- Determine item skill level and if skill up is possible
+         local catchLevel = fishdata[item].skill_level or fishdata[(item):sub(1,-2)].skill_level or 0;
+         if (catchLevel == 0) then return false; end
+         local player = AshitaCore:GetMemoryManager():GetPlayer();
+         local fishingSkill = player:GetCraftSkill(0):GetSkill();
+         local lvldiff = catchLevel - fishingSkill;
+         if (lvldiff <= 0 or lvldiff >= 50) then return false; end
+         
+         -- Base calculations/varaibles needed for skill up
+         local normDist = math.exp(-0.5 * math.log(2 * math.pi) - math.log(5) - math.pow(lvldiff - 11, 2) / 50);
+         local distMod = math.floor(normDist * 200);
+         local lowerLevelBonus = math.floor((100 - fishingSkill) / 10);
+         local skillLevelPenalty = math.floor(fishingSkill / 10);
+         local maxChance = math.max(4, distMod + lowerLevelBonus - skillLevelPenalty);
+         local maxSkillAmount = math.min(1 + math.floor(lvldiff / 5), 3);
+         local bonusChanceRoll = 8;
+         local skillRoll = 90;
+
+         -- need to skillRoll+20 for lu shang under 50 --
+
+         -- Adjust skill chance for moon
+         local moon_table = GetMoon(moon);
+         local waxing = moon_table.MoonIndex > 43;
+         local waning = moon_table.MoonIndex < 43;
+         if (moon_table.MoonPhasePercent == 0) then
+            skillRoll = skillRoll - 20;
+            bonusChanceRoll = bonusChanceRoll - 3;
+         elseif (moon_table.MoonPhasePercent == 100) then
+            skillRoll = skillRoll + 10;
+            bonusChanceRoll = bonusChanceRoll + 3;
+         elseif (waning and moon_table.MoonPhasePercent <= 10) then
+            skillRoll = skillRoll - 15;
+            bonusChanceRoll = bonusChanceRoll - 2;
+         elseif (waning and moon_table.MoonPhasePercent >= 95) then
+            skillRoll = skillRoll +  5;
+            bonusChanceRoll = bonusChanceRoll + 2;
+         elseif (waxing and moon_table.MoonPhasePercent <=  5) then
+            skillRoll = skillRoll - 10;
+            bonusChanceRoll = bonusChanceRoll - 1;
+         elseif (waxing and moon_table.MoonPhasePercent >= 90) then
+            bonusChanceRoll = bonusChanceRoll + 1;
+         end
+         
+         -- Adjust skill chance for not in city zone
+         local isCity = ZoneType[party:GetMemberZone(0)] == 1 or false;
+         if (not isCity) then
+            skillRoll = skillRoll - 10;
+         end
+         
+         -- Add bonus when fishing skill under 50
+         if (fishingSkill < 50) then
+            skillRoll = skillRoll - (20 - math.floor(fishingSkill / 3));
+         end
+         
+         -- Generate replacement chat message
+         local skillUpChance = (maxChance / (skillRoll + 1)) * 100;
+         message = string.format('%s (skill up chance: %.2f%%)', e.message, skillUpChance);
+                  
+         -- Block original chat message and inject new message
+         e.blocked = true;
+         AshitaCore:GetChatManager():AddChatMessage(e.mode, false, message);
+      end
    end
    
-    return false;
+   return false;
 end);
 
 

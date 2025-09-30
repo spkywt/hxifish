@@ -89,6 +89,7 @@ function GetMoon(moon)
    local timestamp = GetTimestamp();
    local moon_index = ((timestamp.day + 26) % 84) + 1;
    local moon_table = {};
+   moon_table.MoonIndex = moon_index;
    moon_table.MoonPhase = moon.Phase[moon_index];
    moon_table.MoonPhasePercent = moon.PhasePercent[moon_index];
    return moon_table;
