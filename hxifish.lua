@@ -93,6 +93,7 @@ local function FishingTracker()
       if (FishingSkill == nil) then FishingSkill = player:GetCraftSkill(0):GetSkill(); end
       local FishingSkillMax = (player:GetCraftSkill(0):GetRank() + 1) * 10;
       local DisplaySkill = FishingSkill .. ' / ' .. FishingSkillMax;
+      local ShowSkillGain = false;
       if (FishingSkillMax == FishingSkill) then
          if (FishingSkill == 100) then
             imgui.PushStyleColor(ImGuiCol_Text, {0, 1, 0, 1});
@@ -106,11 +107,13 @@ local function FishingTracker()
          DisplaySkill = DisplaySkill .. ' RANK QUEST';
       else
          imgui.PushStyleColor(ImGuiCol_Text, {1, 1, 1, 1});
+         ShowSkillGain = true;
       end
       imgui.Text(DisplaySkill);
       imgui.PopStyleColor(1);
-      if (config.Fishing.session.skill > 0) then
-         imgui.Text('Skill+  ' .. tostring(config.Fishing.session.skill));
+      if (ShowSkillGain and config.Fishing.session.skill > 0) then
+         imgui.SameLine();
+         imgui.TextColored({0.5, 1.0, 0.5, 1.0}, '+' .. config.Fishing.session.skill);
       end
       imgui.Separator();
       
@@ -151,9 +154,10 @@ local function FishingTracker()
       if config.editItem.show then
          -- Edit Item Panel (overrides catch history)
          imgui.BeginChild('Edit Item', {0, 166}, true);
-            imgui.Text('Id:        ' .. config.editItem.id);
             imgui.Text('Name:      ' .. config.editItem.name);
             imgui.Text('Level:     ' .. fishdata[config.editItem.name].skill_level);
+            imgui.Separator();
+            imgui.Text('Caught:    '  .. config.Fishing.alltime.history[config.editItem.name]);
             if (fishdata[config.editItem.name].min_length ~= nil
                 and fishdata[config.editItem.name].item == 0) then
                imgui.Separator();
