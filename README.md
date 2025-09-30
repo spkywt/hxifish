@@ -4,7 +4,7 @@ Window automatically opens when casting your line.<br /><br />
 <table>
   <tr>
     <td>/hxifish</td>
-    <td>manual show the tracking window</td>
+    <td>manually show the tracking window</td>
 </tr>
 </table>
 <br />
