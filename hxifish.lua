@@ -26,7 +26,7 @@
 addon.author            = 'Espe (spkywt)';
 addon.name              = 'hxifish';
 addon.desc              = 'Tracker for fishing statistics.';
-addon.version           = '1.5.1';
+addon.version           = '1.5.3';
 
 -- Ashita Libs
 require 'common'
@@ -456,10 +456,10 @@ ashita.events.register('text_in', 'text_in_cb', function(e) -- Unused: e.mode , 
          -- Get item name
          local rmItem = AshitaCore:GetResourceManager():GetItemById(config.Fishing.session.lastCatch);
          local item_name = (rmItem.Name and rmItem.Name[1]) or (rmItem.Name and rmItem.Name[0]) or nil;
-         if (item_name == nil) then return false; end
+         if (item_name == nil or fishdata[item_name].item == 1) then return false; end       
          
          -- Determine item skill level and if skill up is possible
-         local catchLevel = fishdata[item_name].skill_level;
+         local catchLevel = fishdata[item_name].skill_level or 0;
          if (catchLevel == 0) then return false; end
          local player = AshitaCore:GetMemoryManager():GetPlayer();
          local fishingSkill = player:GetCraftSkill(0):GetSkill();
@@ -617,7 +617,7 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
                config.Fishing.session.lastCatch = item;
                
                -- Notify if EPIC catch!
-               if (length > 1 and weight > 1) then
+               if (fishdata[item_name].contest == 1) then
                   -- Length check
                   local min_l = fishdata[item_name].min_length;
                   local max_l = fishdata[item_name].max_length;
