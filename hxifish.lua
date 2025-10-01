@@ -26,7 +26,7 @@
 addon.author            = 'Espe (spkywt)';
 addon.name              = 'hxifish';
 addon.desc              = 'Tracker for fishing statistics.';
-addon.version           = '1.5.3';
+addon.version           = '1.5.4';
 
 -- Ashita Libs
 require 'common'
@@ -452,7 +452,7 @@ ashita.events.register('text_in', 'text_in_cb', function(e) -- Unused: e.mode , 
       end
       
       --Update chat log message with skill up chance (fish only)
-      if (fishSuccess and not monster) then
+      if (fishSuccess and not monster and config.Fishing.skill < 100) then
          -- Get item name
          local rmItem = AshitaCore:GetResourceManager():GetItemById(config.Fishing.session.lastCatch);
          local item_name = (rmItem.Name and rmItem.Name[1]) or (rmItem.Name and rmItem.Name[0]) or nil;

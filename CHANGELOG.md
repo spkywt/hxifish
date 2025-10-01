@@ -1,14 +1,16 @@
 <h1>Planned Work</h1>
 <ul>
   <li>
-    Skill-up chance message
+    Add settings to enable/disable features
     <ul>
       <li>
-          Do not show Skill-Up % when fishing skill is capped at 100.
+        <label>
+          Skill-Up % chance
+        </label>
       </li>
       <li>
         <label>
-          Add setting to make Skill-Up % display optional.
+          EPIC CATCH message
         </label>
       </li>
     </ul>
@@ -17,6 +19,14 @@
 
 <h1>Completed Work</h1>
 <ul>
+  <li>
+    1.5.4
+    <ul>
+      <li>
+          Skill-Up % chance no longer appears when fishing skill is capped at 100.
+      </li>
+    </ul>
+  </li>
   <li>
     1.5.3
     <ul>
