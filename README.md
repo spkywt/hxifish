@@ -1,5 +1,6 @@
-# hxifish (1.5.1 published on 2025-10-01)
+# hxifish
 FFXI Tracker for fishing statistics. <br /><br />
+1.5.1 published on 2025-10-01<br /><br />
 Window automatically opens when casting your line.<br /><br />
 <table>
   <tr>
