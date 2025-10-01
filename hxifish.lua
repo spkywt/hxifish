@@ -26,7 +26,7 @@
 addon.author            = 'Espe (spkywt)';
 addon.name              = 'hxifish';
 addon.desc              = 'Tracker for fishing statistics.';
-addon.version           = '1.4.0';
+addon.version           = '1.4.1';
 
 -- Ashita Libs
 require 'common'
@@ -477,7 +477,11 @@ ashita.events.register('text_in', 'text_in_cb', function(e) -- Unused: e.mode , 
          local bonusChanceRoll = 8;
          local skillRoll = 90;
 
-         -- need to skillRoll+20 for lu shang under 50 --
+         -- Penalty for using lu shang under 50 skill
+         -- Lu Shang's Fishing Rod (17386)
+         if (GetEquipment().Range.Item.Id == 17386) then
+            skillRoll = skillRoll + 20;
+         end
 
          -- Adjust skill chance for moon
          local moon_table = GetMoon(moon);

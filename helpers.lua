@@ -94,3 +94,46 @@ function GetMoon(moon)
    moon_table.MoonPhasePercent = moon.PhasePercent[moon_index];
    return moon_table;
 end
+
+--=============================================================================
+-- Return equipment data
+---@return table equipTable Current equipment information
+--=============================================================================
+-- based on code from LuAshitacast by Thorny
+-- revised function taken from chains
+--=============================================================================
+-- Combined gData.GetEquipment and gEquip.GetCurrentEquip
+--=============================================================================
+GetEquipment = function()
+    local inventoryManager = AshitaCore:GetMemoryManager():GetInventory();
+    local equipTable = {};
+
+    for k, v in pairs(EquipSlotNames) do
+        local equippedItem = inventoryManager:GetEquippedItem(k - 1);
+        local index = bit.band(equippedItem.Index, 0x00FF);
+        local eqEntry = {};
+        if (index == 0) then
+            eqEntry.Container = 0;
+            eqEntry.Item = nil;
+        else
+            eqEntry.Container = bit.band(equippedItem.Index, 0xFF00) / 256;
+            eqEntry.Item = inventoryManager:GetContainerItem(eqEntry.Container, index);
+            if (eqEntry.Item.Id == 0) or (eqEntry.Item.Count == 0) then
+                eqEntry.Item = nil;
+            end
+        end
+        if (type(eqEntry) == 'table') and (eqEntry.Item ~= nil) then
+            local resource = AshitaCore:GetResourceManager():GetItemById(eqEntry.Item.Id);
+            if (resource ~= nil) then
+                local singleTable = {};
+                singleTable.Container = eqEntry.Container;
+                singleTable.Item = eqEntry.Item;
+                singleTable.Name = resource.Name[1];
+                singleTable.Resource = resource;
+                equipTable[v] = singleTable;
+            end
+        end
+    end
+
+    return equipTable;
+end

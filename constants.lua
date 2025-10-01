@@ -5,7 +5,10 @@ ZoneType = {[0] = 1,[26] = 1,[32] = 1,[48] = 1,[50] = 1,[70] = 1,[71] = 1,[80] =
 
 SkillTypes = {[48]="Fishing",[49]="Woodworking",[50]="Smithing",[51]="Goldsmithing",[52]="Clothcraft",[53]="Leathercraft",[54]="Bonecraft",[55]="Alchemy",[56]="Cooking",[57]="Synergy",[58]="Rid",[59]="Dig"};
 
+EquipSlotNames = T{[1] = 'Main',[2] = 'Sub',[3] = 'Range',[4] = 'Ammo',[5] = 'Head',[6] = 'Body',[7] = 'Hands',[8] = 'Legs',[9] = 'Feet',[10] = 'Neck',[11] = 'Waist',[12] = 'Ear1',[13] = 'Ear2',[14] = 'Ring1',[15] = 'Ring2',[16] = 'Back'};
+
 return {
    ZoneType = ZoneType,
-   SkillTypes = SkillTypes
+   SkillTypes = SkillTypes,
+   EquipSlotNames = EquipSlotNames
 }
