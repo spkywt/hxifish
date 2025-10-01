@@ -26,7 +26,7 @@
 addon.author            = 'Espe (spkywt)';
 addon.name              = 'hxifish';
 addon.desc              = 'Tracker for fishing statistics.';
-addon.version           = '1.5.0';
+addon.version           = '1.5.1';
 
 -- Ashita Libs
 require 'common'
@@ -454,13 +454,12 @@ ashita.events.register('text_in', 'text_in_cb', function(e) -- Unused: e.mode , 
       --Update chat log message with skill up chance (fish only)
       if (fishSuccess and not monster) then
          -- Get item name
-         local function esc(s) return (s:gsub("(%W)","%%%1")); end
-         local item = message:match('^%s*' .. esc(playerName) .. '%s+caught%s+([^!]+)!?%s*$')
-                      :gsub('^%s*an?%s+',''):gsub('%s+$','');
-         local item = item:lower():gsub("%f[%a]%l", string.upper);
+         local rmItem = AshitaCore:GetResourceManager():GetItemById(config.Fishing.session.lastCatch);
+         local item_name = (rmItem.Name and rmItem.Name[1]) or (rmItem.Name and rmItem.Name[0]) or nil;
+         if (item_name == nil) then return false; end
          
          -- Determine item skill level and if skill up is possible
-         local catchLevel = fishdata[item].skill_level or fishdata[(item):sub(1,-2)].skill_level or 0;
+         local catchLevel = fishdata[item_name].skill_level;
          if (catchLevel == 0) then return false; end
          local player = AshitaCore:GetMemoryManager():GetPlayer();
          local fishingSkill = player:GetCraftSkill(0):GetSkill();
