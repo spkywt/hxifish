@@ -1,8 +1,8 @@
 # hxifish
-FFXI Tracker for fishing statistics. <br /><br />
+FFXI Tracker for fishing statistics. Window automatically opens when casting your line.<br /><br />
 Current Version: 1.5.4<br />
-Published: 2025-10-01<br /><br />
-Window automatically opens when casting your line.<br /><br />
+Published: 2025-10-01<br />
+<a href="https://github.com/spkywt/hxifish/blob/main/CHANGELOG.md">View Changelog</a><br /><br />
 <table>
   <tr>
     <td>/hxifish</td>
@@ -17,4 +17,3 @@ New in 1.4 -- skill up chance in catch message<br />
 <img width="254" height="562" alt="image" src="https://github.com/user-attachments/assets/513f756e-cf1c-4ced-84a8-3ccc7a630415" />
 <img width="249" height="560" alt="image" src="https://github.com/user-attachments/assets/7a334713-fdd7-4763-89ed-c7519e000056" />
 <img width="251" height="558" alt="image" src="https://github.com/user-attachments/assets/09b6f34d-9f6d-407e-9e42-8cd13589f866" />
-<br /><br />
