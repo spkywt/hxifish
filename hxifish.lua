@@ -619,12 +619,9 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
                
                -- Notify if EPIC catch!
                if (length > 1 and weight > 1) then
+                  -- Length check
                   local min_l = fishdata[item_name].min_length;
                   local max_l = fishdata[item_name].max_length;
-                  local min_w = fishdata[item_name].min_weight;
-                  local max_w = fishdata[item_name].max_weight;
-                  
-                  -- Length check
                   local length_p = get_percentile(length, min_l, max_l);
                   if (length_p <= 0.1 or length_p >= 99.9) then
                      echo(addon.name, 'EPIC CATCH!!');
@@ -632,6 +629,8 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
                   end
                   
                   -- Weight check
+                  local min_w = fishdata[item_name].min_weight;
+                  local max_w = fishdata[item_name].max_weight;
                   local weight_p = get_percentile(weight, min_w, max_w);
                   if (weight_p <= 0.1 or weight_p >= 99.9) then
                      echo(addon.name, 'EPIC CATCH!!');
