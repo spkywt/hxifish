@@ -628,6 +628,7 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
                   local length_p = get_percentile(length, min_l, max_l);
                   if (length_p <= 0.1 or length_p >= 99.9) then
                      echo(addon.name, 'EPIC CATCH!!');
+                     return;
                   end
                   
                   -- Weight check
