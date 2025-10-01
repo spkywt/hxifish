@@ -63,6 +63,39 @@ function format_time(sec)
 end
 
 ----------------------------------------------------------------------------------------------------
+-- func: round
+-- returns rounded number to specific decimal places
+----------------------------------------------------------------------------------------------------
+function round(num, decimals)
+   local mult = 10^decimals
+   return math.floor(num * mult + 0.5) / mult
+end
+
+----------------------------------------------------------------------------------------------------
+-- func: get_percentile
+-- Returns percentile p in [0,1] for value x
+-- under the triangular distribution from averaging two Uniform(min, max).
+----------------------------------------------------------------------------------------------------
+function get_percentile(x, min_val, max_val)
+   assert(min_val < max_val, "min_val must be < max_val");
+
+   -- Clamp x into [min_val, max_val]
+   if x < min_val then x = min_val; end
+   if x > max_val then x = max_val; end
+
+   local span = max_val - min_val;
+   local mid  = (min_val + max_val) / 2;
+
+   if x <= mid then
+      local t = (x - min_val) / span;
+      return (2 * t * t) * 100;
+   else
+      local t = (max_val - x) / span;
+      return (1 - 2 * t * t) * 100;
+   end
+end
+
+----------------------------------------------------------------------------------------------------
 -- Helper functions borrowed from luashitacast
 ----------------------------------------------------------------------------------------------------
 function GetTimestamp()

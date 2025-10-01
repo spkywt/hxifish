@@ -26,7 +26,7 @@
 addon.author            = 'Espe (spkywt)';
 addon.name              = 'hxifish';
 addon.desc              = 'Tracker for fishing statistics.';
-addon.version           = '1.4.1';
+addon.version           = '1.5.0';
 
 -- Ashita Libs
 require 'common'
@@ -574,8 +574,10 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
    if (config.Status == 'FISHING') then
       -- Capture incoming 'Item Update' packet to see what was catch
       if (id == 0x020) then
-         local item  = struct.unpack('H', packet, 0x0C + 1);
-         local count = struct.unpack('H', packet, 0x04 + 1);
+         local item   = struct.unpack('H', packet, 0x0C + 1);
+         local count  = struct.unpack('H', packet, 0x04 + 1);
+         local length = struct.unpack('H', packet, 0x11 + 1);
+         local weight = struct.unpack('H', packet, 0x11 + 3);
          
          if (item ~= 0) then
             local rmItem = AshitaCore:GetResourceManager():GetItemById(item);
@@ -611,9 +613,29 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
                config.Fishing.session.gph.sum = config.Fishing.session.gph.sum
                                               + GetItemPrice(item_name);
                
+               settings.save();
+               
                config.Fishing.session.lastCatch = item;
                
-               settings.save();
+               -- Notify if EPIC catch!
+               if (length > 1 and weight > 1) then
+                  local min_l = fishdata[item_name].min_length;
+                  local max_l = fishdata[item_name].max_length;
+                  local min_w = fishdata[item_name].min_weight;
+                  local max_w = fishdata[item_name].max_weight;
+                  
+                  -- Length check
+                  local length_p = get_percentile(length, min_l, max_l);
+                  if (length_p <= 0.1 or length_p >= 99.9) then
+                     echo(addon.name, 'EPIC CATCH!!');
+                  end
+                  
+                  -- Weight check
+                  local weight_p = get_percentile(weight, min_w, max_w);
+                  if (weight_p <= 0.1 or weight_p >= 99.9) then
+                     echo(addon.name, 'EPIC CATCH!!');
+                  end
+               end
             else
                echo(addon.name, 'unknown item name: ' .. item_name);
             end
