@@ -1,4 +1,4 @@
-# hxifish
+# hxifish (1.5.1)
 FFXI Tracker for fishing statistics. <br /><br />
 Window automatically opens when casting your line.<br /><br />
 <table>
