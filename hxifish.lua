@@ -26,7 +26,7 @@
 addon.author            = 'Espe (spkywt)';
 addon.name              = 'hxifish';
 addon.desc              = 'Tracker for fishing statistics.';
-addon.version           = '1.5.4';
+addon.version           = '1.5.5';
 
 -- Ashita Libs
 require 'common'
@@ -624,6 +624,8 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
                   local length_p = get_percentile(length, min_l, max_l);
                   if (length_p <= 0.1 or length_p >= 99.9) then
                      echo(addon.name, 'EPIC CATCH!!');
+                     local soundpath = addon.path .. 'files/fish_splash.wav';
+                     ashita.misc.play_sound(soundpath);
                      return;
                   end
                   
@@ -633,6 +635,8 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
                   local weight_p = get_percentile(weight, min_w, max_w);
                   if (weight_p <= 0.1 or weight_p >= 99.9) then
                      echo(addon.name, 'EPIC CATCH!!');
+                     local soundpath = addon.path .. 'files/fish_splash.wav';
+                     ashita.misc.play_sound(soundpath);
                   end
                end
             else

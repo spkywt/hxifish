@@ -20,6 +20,15 @@
 <h1>Completed Work</h1>
 <ul>
   <li>
+    1.5.5
+    <ul>
+      <li>
+          Added splash sound effect when catching an EPIC CATCH.
+      </li>
+    </ul>
+  </li>
+  <li>
+  <li>
     1.5.4
     <ul>
       <li>
