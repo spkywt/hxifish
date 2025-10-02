@@ -10,7 +10,7 @@ Published: 2025-10-02<br />
 </tr>
 </table>
 <br />
-New in 1.5 -- added notification epic fish that should be good enough for fishing competitionbr />
+New in 1.5 -- added notification for epic fish that should be good enough for fishing competitionbr />
 <img width="465" height="92" alt="image" src="https://github.com/user-attachments/assets/470bfaec-0a7f-4d1b-96e6-d8093113c2d0" /><br /><br />
 New in 1.4 -- skill up chance in catch message<br />
 <img width="535" height="35" alt="image" src="https://github.com/user-attachments/assets/fa37148c-d896-4a7c-a478-55e8156614d5" /><br /><br />
