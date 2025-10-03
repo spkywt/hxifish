@@ -44,7 +44,6 @@
     </ul>
   </li>
   <li>
-  <li>
     1.5.4
     <ul>
       <li>
@@ -59,9 +58,7 @@
           Epic Catch notification now only triggers for contest eligible fish.
       </li>
       <li>
-        <label>
           Skill up % chance no longer shows for items.
-        </label>
       </li>
     </ul>
   </li>
