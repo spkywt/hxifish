@@ -20,6 +20,14 @@
 <h1>Completed Work</h1>
 <ul>
   <li>
+    1.5.56
+    <ul>
+      <li>
+          Fixed crash due skill tracking not having been set in some instances.
+      </li>
+    </ul>
+  </li>
+  <li>
     1.5.5
     <ul>
       <li>

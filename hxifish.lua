@@ -26,7 +26,7 @@
 addon.author            = 'Espe (spkywt)';
 addon.name              = 'hxifish';
 addon.desc              = 'Tracker for fishing statistics.';
-addon.version           = '1.5.5';
+addon.version           = '1.5.6';
 
 -- Ashita Libs
 require 'common'
@@ -88,21 +88,22 @@ local function FishingTracker()
       -- Current Fishing Skill
       imgui.Text('Skill:');
       imgui.SameLine();
-      local FishingSkill = config.Fishing.skill;
       local player = AshitaCore:GetMemoryManager():GetPlayer();
-      if (FishingSkill == nil) then FishingSkill = player:GetCraftSkill(0):GetSkill(); end
+      if (config.Fishing.skill == nil) then
+         config.Fishing.skill = player:GetCraftSkill(0):GetSkill();
+      end
       local FishingSkillMax = (player:GetCraftSkill(0):GetRank() + 1) * 10;
-      local DisplaySkill = FishingSkill .. ' / ' .. FishingSkillMax;
+      local DisplaySkill = config.Fishing.skill .. ' / ' .. FishingSkillMax;
       local ShowSkillGain = false;
-      if (FishingSkillMax == FishingSkill) then
-         if (FishingSkill == 100) then
+      if (FishingSkillMax == config.Fishing.skill) then
+         if (config.Fishing.skill == 100) then
             imgui.PushStyleColor(ImGuiCol_Text, {0, 1, 0, 1});
             DisplaySkill = DisplaySkill .. ' MAXED';
          else
             imgui.PushStyleColor(ImGuiCol_Text, {1, 0, 0, 1});
             DisplaySkill = DisplaySkill .. ' CAPPED';
          end
-      elseif (FishingSkillMax - FishingSkill <= 2) and (FishingSkill < 98) then 
+      elseif (FishingSkillMax - config.Fishing.skill <= 2) and (config.Fishing.skill < 98) then 
          imgui.PushStyleColor(ImGuiCol_Text, {0, 1, 0, 1});
          DisplaySkill = DisplaySkill .. ' RANK QUEST';
       else
@@ -461,16 +462,14 @@ ashita.events.register('text_in', 'text_in_cb', function(e) -- Unused: e.mode , 
          -- Determine item skill level and if skill up is possible
          local catchLevel = fishdata[item_name].skill_level or 0;
          if (catchLevel == 0) then return false; end
-         local player = AshitaCore:GetMemoryManager():GetPlayer();
-         local fishingSkill = player:GetCraftSkill(0):GetSkill();
-         local lvldiff = catchLevel - fishingSkill;
+         local lvldiff = catchLevel - config.Fishing.skill;
          if (lvldiff <= 0 or lvldiff >= 50) then return false; end
          
          -- Base calculations/varaibles needed for skill up
          local normDist = math.exp(-0.5 * math.log(2 * math.pi) - math.log(5) - math.pow(lvldiff - 11, 2) / 50);
          local distMod = math.floor(normDist * 200);
-         local lowerLevelBonus = math.floor((100 - fishingSkill) / 10);
-         local skillLevelPenalty = math.floor(fishingSkill / 10);
+         local lowerLevelBonus = math.floor((100 - config.Fishing.skill) / 10);
+         local skillLevelPenalty = math.floor(config.Fishing.skill / 10);
          local maxChance = math.max(4, distMod + lowerLevelBonus - skillLevelPenalty);
          local maxSkillAmount = math.min(1 + math.floor(lvldiff / 5), 3);
          local bonusChanceRoll = 8;
@@ -512,8 +511,8 @@ ashita.events.register('text_in', 'text_in_cb', function(e) -- Unused: e.mode , 
          end
          
          -- Add bonus when fishing skill under 50
-         if (fishingSkill < 50) then
-            skillRoll = skillRoll - (20 - math.floor(fishingSkill / 3));
+         if (config.Fishing.skill < 50) then
+            skillRoll = skillRoll - (20 - math.floor(config.Fishing.skill / 3));
          end
          
          -- Generate replacement chat message
