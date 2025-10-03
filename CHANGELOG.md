@@ -20,7 +20,15 @@
 <h1>Completed Work</h1>
 <ul>
   <li>
-    1.5.56
+    1.5.7
+    <ul>
+      <li>
+          Fixed bug with Three-eyed Fish name not matching due to case sensitivity.
+      </li>
+    </ul>
+  </li>
+  <li>
+    1.5.6
     <ul>
       <li>
           Fixed crash due skill tracking not having been set in some instances.
