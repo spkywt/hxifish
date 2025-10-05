@@ -26,7 +26,7 @@
 addon.author            = 'Espe (spkywt)';
 addon.name              = 'hxifish';
 addon.desc              = 'Tracker for fishing statistics.';
-addon.version           = '1.5.7';
+addon.version           = '1.6.0';
 
 -- Ashita Libs
 require 'common'
@@ -38,9 +38,13 @@ require 'constants'
 require 'helpers'
 local moon              = require('.\\data\\moon');
 local fishdata          = require('.\\data\\fishdata');
-local defaults          = require('defaults');
-local config;
 
+-- Addon Settings
+local config;
+local defaults          = require('defaults');
+local globals           = T{
+      packetSync        = 0;
+}
 
 ----------------------------------------------------------------------------------------------------
 -- func: UpdateGph
@@ -572,6 +576,13 @@ ashita.events.register('packet_in', 'packet_in_cb', function(e)
    if (config.Status == 'FISHING') then
       -- Capture incoming 'Item Update' packet to see what was catch
       if (id == 0x020) then
+         if (globals.packetSync == 1) then
+            globals.packetSync = 0;
+         else
+            return;
+         end
+         
+         -- Continue if Sync aligns with hook action
          local item   = struct.unpack('H', packet, 0x0C + 1);
          local count  = struct.unpack('H', packet, 0x04 + 1);
          local length = struct.unpack('H', packet, 0x11 + 1);
@@ -692,10 +703,10 @@ end);
 ashita.events.register('packet_out', 'packet_out_cb', function(e) -- id, size, data
    -- Capture outgoing 'Action' packets
    if (e.id == 0x01A) then
-      local newpacket = e.data:totable();
+      local category = struct.unpack('H', e.data, 0x0A + 1);
       
       -- 0x0A | Category | Cast Fishing Rod <= 14 (0x000E)
-      if (newpacket[0x0A+1] == 14) then
+      if (category == 14) then
          config.Status = 'FISHING';
          config.Fishing.show = true;
          config.Fishing.session.casts = config.Fishing.session.casts + 1;
@@ -707,10 +718,15 @@ ashita.events.register('packet_out', 'packet_out_cb', function(e) -- id, size, d
    
    -- Capture outgoing 'Fishing Action' packets
    if (e.id == 0x110 and config.Status == 'FISHING') then
-      local newpacket = e.data:totable();
+      local action = struct.unpack('H', e.data, 0x0E + 1);
+      
+      -- 0x0E | Action | Hook Action <= 3 - 0x03 - 0000 0011 - ''
+      if (action == 3) then
+         globals.packetSync = 1;
+      end
       
       -- 0x0E | Action | End <= 4 - 0x04 - 0000 0100 - ''
-      if (newpacket[0x0E+1] == 0x04) then
+      if (action == 4) then
          config.Status = nil;
          config.Fishing.session.canceled = config.Fishing.session.canceled + 1;
          config.Fishing.alltime.canceled = config.Fishing.alltime.canceled + 1;

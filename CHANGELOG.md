@@ -20,6 +20,14 @@
 <h1>Completed Work</h1>
 <ul>
   <li>
+    1.6.0
+    <ul>
+      <li>
+          Reworked packet monitoring to prevent item drops during fishing to mess up catch history.
+      </li>
+    </ul>
+  </li>
+  <li>
     1.5.7
     <ul>
       <li>
