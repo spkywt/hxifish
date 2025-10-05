@@ -26,6 +26,11 @@
           Fixed bug with Three-eyed Fish name not matching due to case sensitivity.
       </li>
     </ul>
+    <ul>
+      <li>
+          Fixed Lu Shang's penalty always applying instead of under 50 skill.
+      </li>
+    </ul>
   </li>
   <li>
     1.5.6
