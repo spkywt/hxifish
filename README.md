@@ -1,7 +1,7 @@
 # hxifish
 FFXI Tracker for fishing statistics. Window automatically opens when casting your line.<br /><br />
 Current Version: 1.5.7<br />
-Published: 2025-10-02<br />
+Published: 2025-10-05<br />
 <a href="https://github.com/spkywt/hxifish/blob/main/CHANGELOG.md">View Changelog</a><br /><br />
 <table>
   <tr>
