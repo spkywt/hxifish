@@ -30,6 +30,7 @@ addon.version           = '1.6.0';
 
 -- Ashita Libs
 require 'common'
+require 'd3d8'
 local imgui             = require('imgui');
 local settings          = require('settings');
 
@@ -78,8 +79,8 @@ end
 local function FishingTracker()
    -- Initialize the window draw.
    imgui.SetNextWindowBgAlpha(0.8);
-   imgui.SetNextWindowSize({236, 0}, ImGuiSetCond_Always);
-   if (imgui.Begin('Fishing Tracker', true, config.Window_Flags)) then
+   imgui.SetNextWindowSize({236, 0}, ImGuiCond_Always);
+   if (imgui.Begin('Fishing Tracker', nil, config.Window_Flags)) then
       -- Current Zone
       local currentZoneID = AshitaCore:GetMemoryManager():GetParty():GetMemberZone(0)
       local currentZoneName = AshitaCore:GetResourceManager():GetString('zones.names', currentZoneID);
@@ -158,7 +159,7 @@ local function FishingTracker()
       
       if config.editItem.show then
          -- Edit Item Panel (overrides catch history)
-         imgui.BeginChild('Edit Item', {0, 166}, true);
+         imgui.BeginChild('Edit Item', {0, 166}, ImGuiChildFlags_Borders);
             imgui.Text('Name:      ' .. config.editItem.name);
             imgui.Text('Level:     ' .. fishdata[config.editItem.name].skill_level);
             imgui.Separator();
@@ -210,7 +211,7 @@ local function FishingTracker()
          imgui.PopStyleColor(2);
       elseif (config.options.show == true) then
          -- Options Panel (overrides catch history)
-         imgui.BeginChild('Options', {0, 166}, true);
+         imgui.BeginChild('Options', {0, 166}, ImGuiChildFlags_Borders);
             -- Option >> Skill Tracking
             local choices = config.options.choices;
             imgui.Text('Track Skills:');
@@ -234,6 +235,7 @@ local function FishingTracker()
             if (config.options.clrSession[1]) then
                imgui.PushStyleColor(ImGuiCol_Button, {1, 0.3, 0.2, 0.5});
                imgui.PushStyleColor(ImGuiCol_ButtonHovered, {1, 0.3, 0.2, 0.8});
+               imgui.PushStyleColor(ImGuiCol_ButtonActive, {1, 0.3, 0.2, 0.8});
             else
                imgui.PushStyleColor(ImGuiCol_Button, {0.5, 0.5, 0.5, 0.5});
                imgui.PushStyleColor(ImGuiCol_ButtonHovered, {0.5, 0.5, 0.5, 0.5});
@@ -267,7 +269,7 @@ local function FishingTracker()
                };
                config.options.clrSession = { false };
             end
-            imgui.PopStyleColor(2);
+            imgui.PopStyleColor(3);
          imgui.EndChild();
          
          -- Buttons
@@ -283,7 +285,7 @@ local function FishingTracker()
          imgui.PopStyleColor(2);
       else
          -- Catch History
-         imgui.BeginChild('Catch History', {0, 166}, true);
+         imgui.BeginChild('Catch History', {0, 166}, ImGuiChildFlags_Borders);
             imgui.TextColored({1.0, 1.0, 0.4, 1.0}, 'Catch History');
             imgui.SameLine();
             imgui.TextDisabled('(?)');
