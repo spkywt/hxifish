@@ -19,6 +19,14 @@
 
 <h1>Completed Work</h1>
 <ul>
+    <li>
+    1.6.1
+    <ul>
+      <li>
+          Required updates for Ashita 4.3 compatability.
+      </li>
+    </ul>
+  </li>
   <li>
     1.6.0
     <ul>
