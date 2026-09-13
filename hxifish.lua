@@ -468,14 +468,16 @@ ashita.events.register('text_in', 'text_in_cb', function(e) -- Unused: e.mode , 
          -- Determine item skill level and if skill up is possible
          local catchLevel = fishdata[item_name].skill_level or 0;
          if (catchLevel == 0) then return false; end
-         local lvldiff = catchLevel - config.Fishing.skill;
-         if (lvldiff <= 0 or lvldiff >= 50) then return false; end
+         -- The server calculates fishing skill-up odds using the whole skill level.
+         local charSkillLevel = math.floor(config.Fishing.skill);
+         local lvldiff = catchLevel - charSkillLevel;
+         if (lvldiff <= 0 or lvldiff > 50) then return false; end
          
          -- Base calculations/varaibles needed for skill up
          local normDist = math.exp(-0.5 * math.log(2 * math.pi) - math.log(5) - math.pow(lvldiff - 11, 2) / 50);
          local distMod = math.floor(normDist * 200);
-         local lowerLevelBonus = math.floor((100 - config.Fishing.skill) / 10);
-         local skillLevelPenalty = math.floor(config.Fishing.skill / 10);
+         local lowerLevelBonus = math.floor((100 - charSkillLevel) / 10);
+         local skillLevelPenalty = math.floor(charSkillLevel / 10);
          local maxChance = math.max(4, distMod + lowerLevelBonus - skillLevelPenalty);
          local maxSkillAmount = math.min(1 + math.floor(lvldiff / 5), 3);
          local bonusChanceRoll = 8;
@@ -483,7 +485,7 @@ ashita.events.register('text_in', 'text_in_cb', function(e) -- Unused: e.mode , 
 
          -- Penalty for using lu shang under 50 skill
          -- Lu Shang's Fishing Rod (17386)
-         if (GetEquipment().Range.Item.Id == 17386 and config.Fishing.skill < 50) then
+         if (GetEquipment().Range.Item.Id == 17386 and charSkillLevel < 50) then
             skillRoll = skillRoll + 20;
          end
 
@@ -517,12 +519,13 @@ ashita.events.register('text_in', 'text_in_cb', function(e) -- Unused: e.mode , 
          end
          
          -- Add bonus when fishing skill under 50
-         if (config.Fishing.skill < 50) then
-            skillRoll = skillRoll - (20 - math.floor(config.Fishing.skill / 3));
+         if (charSkillLevel < 50) then
+            skillRoll = skillRoll - (20 - math.floor(charSkillLevel / 3));
          end
          
          -- Generate replacement chat message
-         local skillUpChance = (maxChance / (skillRoll + 1)) * 100;
+         -- GetRandomNumber(skillRoll) returns an integer in [0, skillRoll).
+         local skillUpChance = (maxChance / skillRoll) * 100;
          message = string.format('%s (skill up chance: %.2f%%)', e.message, skillUpChance);
                   
          -- Block original chat message and inject new message
